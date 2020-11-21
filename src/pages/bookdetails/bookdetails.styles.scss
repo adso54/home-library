@@ -1,0 +1,27 @@
+.bookdetails {
+    background-color: #106466;
+    display: flex;
+}
+
+.rightContainer {
+    padding: 3rem;
+    padding-left: 100px;
+}
+.form {
+    width: 50%;
+    padding: 2rem;
+}
+
+.image {
+    height: 500px;
+}
+
+.lastCol {
+    width: 30px;
+    cursor: pointer;
+}
+
+.addRow {
+    text-align: right;
+    font-size: 1rem;
+}
