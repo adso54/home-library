@@ -7,7 +7,7 @@ import { Switch, Route } from 'react-router-dom'
 
 function App() {
   return (
-    <div>
+    <div className="app">
       <NavbarKD/>
       <Switch>
         <Route exact path="/" component={HomePage} />
