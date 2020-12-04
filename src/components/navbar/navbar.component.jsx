@@ -5,7 +5,7 @@ import React from 'react';
 const NavbarKD = () => (
 
 <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-    <Navbar.Brand href="#home">My Library</Navbar.Brand>
+    <Navbar.Brand href="/">My Library</Navbar.Brand>
     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
     <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">

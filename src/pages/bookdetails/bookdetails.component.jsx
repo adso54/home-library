@@ -1,5 +1,7 @@
 import React from 'react';
 import {Form, Col, Image} from 'react-bootstrap'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import './bookdetails.styles.scss';
 
@@ -11,11 +13,28 @@ class BookDetails extends React.Component  {
                 {   
                     firstName: '', 
                     lastName: ''    
-                }    
-            ]   
+                },
+            ],
+            categories: [''],
+            startDate: new Date(), 
+            comments: ''     
         }
     }
 
+    handleCategory = (elementIndex, event) =>{
+        const value = event.target.value
+        this.setState(state => {
+            const categories = state.categories.map((category, categoryIndex)=>{
+                if(categoryIndex===elementIndex){
+                    return value
+                }else{
+                    return category
+                }
+            }
+            )
+            return {categories: categories}
+        })         
+    }
 
     handleFirstNameChange = (elementIndex, event) =>{
         const value = event.target.value
@@ -59,7 +78,11 @@ class BookDetails extends React.Component  {
         })         
     }
 
-    addHandler = (e) =>{
+    handleStartDateChange = (date) =>{
+        this.setState({startDate: date})
+    }
+
+    addAuthorHandler = (e) =>{
         this.setState(state => {
             const authors = state.authors.concat({ 
                 firstName: '', 
@@ -70,7 +93,14 @@ class BookDetails extends React.Component  {
         })
     };
 
-    deleteHandler = (deleteIndex, event) => {
+    addCategoryHandler = (e) =>{
+        this.setState(state => {
+            const categories = state.categories.concat('')
+            return {categories: categories};
+        })
+    };
+
+    deleteAuthorHandler = (deleteIndex, event) => {
         this.setState(state => {
             if(state.authors.length === 1){
                 return {authors:[
@@ -83,6 +113,18 @@ class BookDetails extends React.Component  {
             }else{
                 const authors = state.authors.filter((author, index) => deleteIndex !== index)
                 return {authors: authors}
+            }
+        })
+    }
+
+    deleteCategoryHandler = (deleteIndex, event) => {
+        this.setState(state => {
+            if(state.categories.length === 1){
+                return {categories:['']
+            }
+            }else{
+                const categories = state.categories.filter((category, index) => deleteIndex !== index)
+                return {categories: categories}
             }
         })
     }
@@ -116,22 +158,71 @@ class BookDetails extends React.Component  {
                                         value={author.lastName} 
                                         onChange={(event) => this.handleLastNameChange(index,event)}
                                     />
-                                    <div className='deleteItem' onClick={(event) => this.deleteHandler(index, event)}>
+                                    <div className='deleteItem' onClick={(event) => this.deleteAuthorHandler(index, event)}>
                                         <i className="far fa-trash-alt"></i>   
                                     </div>
                                 </div>
                                 
                             ))}
 
-                            <div className='addNew' onClick={this.addHandler}>                     
+                            <div className='addNew' onClick={this.addAuthorHandler}>                     
                                 <i className="fas fa-plus"><span> NEW</span></i>
                             </div>
                         </Form.Group>
+                     
+                        <Form.Group as={Col} >
+                            <Form.Label className='label' >Categories</Form.Label>
+
+                            {this.state.categories.map((category, index) =>(
+                                <div className="authors" key={index}>
+                                    <Form.Control 
+                                        id={`firstName ${index}`}
+                                        type="text" 
+                                        placeholder="Category" 
+                                        value={category} 
+                                        onChange={(event) => this.handleCategory(index,event)}
+                                    />
+                                    <div 
+                                        className='deleteItem' 
+                                        onClick={(event) => this.deleteCategoryHandler(index, event)}
+                                    >
+                                        <i className="far fa-trash-alt"></i>   
+                                    </div>
+                                </div>            
+                            ))}
+
+                            <div className='addNew' onClick={this.addCategoryHandler}>                     
+                                <i className="fas fa-plus"><span> NEW</span></i>
+                            </div>
+                        </Form.Group>
+                        <Form.Group as={Col}>
+                            <Form.Label className='label' >Comments</Form.Label>
+                            <Form.Control as="textarea" aria-label="Comments" />
+                        </Form.Group>
+                        <Form.Group as={Col}>
+                            <Form.Label className='label' >Read date </Form.Label>
+                            <DatePicker 
+                                className='datepicker'
+                                selected={this.state.startDate} 
+                                onChange={date => this.handleStartDateChange(date)}
+                                dateFormat="yyyy-MM-dd"
+                                customInput={ 
+                                    <Form.Control 
+                                        id='readDate'
+                                        type="text" 
+                                        value={this.state.startDate}
+                                    />
+                                }
+
+                            />
+                        </Form.Group>
                     </Form>
+
                 </div>
                 <div className="rightContainer">
                     <Image className="image" src="https://image.ceneostatic.pl/data/products/528076/i-diuna.jpg" rounded />
                 </div>
+    
             </div>
         )}
     };
