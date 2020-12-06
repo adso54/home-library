@@ -5,14 +5,14 @@ import { Link } from 'react-router-dom';
 import './card.styles.scss'
 
 const CardKD = ({book}) => {
-    const {id, title, imgUrl, authors, types} = book;
+    const {id, title, imgUrl, authors, categories} = book;
     let authorsInLine = ''
-    let typesInLine =''
+    let categoriesInLine =''
     authors.forEach(author =>(
         authorsInLine ? authorsInLine += ', ' + author : authorsInLine = author
     ))
-    types.forEach(type =>(
-        typesInLine ? typesInLine += ', ' + type : typesInLine = type
+    categories.forEach(category =>(
+        categoriesInLine ? categoriesInLine += ', ' + category : categoriesInLine = category
     ))
     return(
     <Card 
@@ -25,8 +25,8 @@ const CardKD = ({book}) => {
        <Card.Body>
            <Card.Title>{title}</Card.Title>
             <Card.Header>{authorsInLine}</Card.Header>
-            <Card.Footer>{typesInLine}</Card.Footer>
-            <Link to={`/bookdetails/${id}`}><Button variant="primary">Details</Button></Link>
+            <Card.Footer>{categoriesInLine}</Card.Footer>
+            <Link to={`/bookdetails/${id}`} book={book}><Button variant="primary">Details</Button></Link>
        </Card.Body>
    </Card>
 )}

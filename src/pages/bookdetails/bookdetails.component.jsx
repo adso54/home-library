@@ -1,12 +1,14 @@
 import React from 'react';
-import {Form, Col, Image} from 'react-bootstrap'
+import {Form, Col, Image } from 'react-bootstrap'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import bsCustomFileInput from 'bs-custom-file-input'
+
 
 import './bookdetails.styles.scss';
 
 class BookDetails extends React.Component  {
-    constructor(props) {
+    constructor() {
         super();
         this.state = {
             authors: [
@@ -17,8 +19,15 @@ class BookDetails extends React.Component  {
             ],
             categories: [''],
             startDate: new Date(), 
-            comments: ''     
+            comments: '',
+            file: null     
         }
+    
+        
+    }
+
+    componentDidMount = () => {
+        bsCustomFileInput.init();
     }
 
     handleCategory = (elementIndex, event) =>{
@@ -129,6 +138,14 @@ class BookDetails extends React.Component  {
         })
     }
 
+    handleImageChange = (e) => {
+        this.setState({
+            file: URL.createObjectURL(e.target.files[0])
+          })
+    }
+
+    
+
     render(){
         
         return(
@@ -220,7 +237,13 @@ class BookDetails extends React.Component  {
 
                 </div>
                 <div className="rightContainer">
-                    <Image className="image" src="https://image.ceneostatic.pl/data/products/528076/i-diuna.jpg" rounded />
+                    <Image className="image" src={this.state.file} rounded />
+                    <Form.File 
+                        id="custom-file"
+                        label="Custom file input"
+                        custom
+                        onChange={this.handleImageChange}
+                    />
                 </div>
     
             </div>
