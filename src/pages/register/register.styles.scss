@@ -1,0 +1,24 @@
+.register {
+    background-color: #106466;
+    display: flex;
+    justify-content: center;
+
+    .title {
+        display: flex;
+        justify-content: center;
+        color: white;
+    }
+
+    .registerForm {
+        width: 500px;
+    }
+    
+    .registerButton {
+        display: flex;
+        justify-content: center;
+        .but { 
+            width: 50%;
+        }
+    }
+}
+

@@ -1,4 +1,5 @@
 import {Navbar, NavDropdown, Nav} from 'react-bootstrap';
+// import {Link} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 
@@ -19,12 +20,14 @@ const NavbarKD = () => (
             <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
         </NavDropdown>
         </Nav>
-    <Nav>
-        <Nav.Link href="#deets">More deets</Nav.Link>
-        <Nav.Link eventKey={2} href="#memes">
-            Dank memes
-        </Nav.Link>
-        </Nav>
+    {/* <Nav>
+        <Link to='/signin'>
+            <Nav.Link>Log in</Nav.Link>
+        </Link> 
+        <Link to='/register'>
+            <Nav.Link >Register</Nav.Link>
+        </Link> 
+    </Nav> */}
     </Navbar.Collapse>
 </Navbar>
 )
