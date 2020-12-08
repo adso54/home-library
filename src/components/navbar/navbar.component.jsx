@@ -1,7 +1,9 @@
 import {Navbar, NavDropdown, Nav} from 'react-bootstrap';
-// import {Link} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
+
+import './navbar.styles.scss'
 
 const NavbarKD = () => (
 
@@ -20,14 +22,19 @@ const NavbarKD = () => (
             <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
         </NavDropdown>
         </Nav>
-    {/* <Nav>
-        <Link to='/signin'>
-            <Nav.Link>Log in</Nav.Link>
-        </Link> 
-        <Link to='/register'>
-            <Nav.Link >Register</Nav.Link>
-        </Link> 
-    </Nav> */}
+    <Nav >
+        <Nav.Link href="#features">
+            <Link to='/login' className="navbar-link" >
+                Log in
+            </Link> 
+        </Nav.Link>
+        <Nav.Link href="#features">
+            <Link to='/register' className="navbar-link"  >
+                Register
+            </Link>
+        </Nav.Link>
+         
+    </Nav>
     </Navbar.Collapse>
 </Navbar>
 )
