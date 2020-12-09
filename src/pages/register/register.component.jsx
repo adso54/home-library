@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Col, Button} from 'react-bootstrap'
+import {Form, Col, Button, Alert} from 'react-bootstrap'
 
 import './register.styles.scss';
 
@@ -12,12 +12,43 @@ class Register extends React.Component{
             confirmPassword: '',
             firstName:'',
             lastName: '',
+            error: null,
         }
     }
 
     handleChange = (e) =>{
         const {name, value} = e.target;
         this.setState({[name]: value})
+    }
+
+    error = (err) => {
+        this.setState({error: err})
+    }
+
+    onSubmitRegister = () => {
+        if(this.state.password === this.state.confirmPassword){
+            this.error(null)
+            fetch('http://localhost:8080/user/register', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    firstName: this.state.firstName,
+                    lastName: this.state.lastName,
+                    email: this.state.email,
+                    password: this.state.password
+                })
+            })
+                .then( response => response.json())
+                .then(user => {
+                    // if(user.id){
+                    //   this.props.loadUser(user);
+                    //   this.props.onRouteChange('home');
+                    // }
+                })
+        }else{
+            this.error("Passwords don't match!")
+        }
+        
     }
 
     render(){
@@ -70,8 +101,14 @@ class Register extends React.Component{
                                 name="confirmPassword"
                             />
                         </Form.Group>
+                        {this.state.error !== null ? 
+                            <Alert variant='danger'>
+                                {this.state.error}
+                            </Alert>
+                            : null
+                        }
                         <div className="registerButton">
-                            <Button variant="success" className="but">Register</Button>
+                            <Button variant="success" className="but" onClick={this.onSubmitRegister}>Register</Button>
                         </div>
                    </Form>
                </div>
