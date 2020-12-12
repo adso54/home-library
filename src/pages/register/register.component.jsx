@@ -1,10 +1,11 @@
 import React from 'react';
-import {Form, Col, Button, Alert} from 'react-bootstrap'
+import {Form, Col, Button, Alert} from 'react-bootstrap';
+import {withRouter} from 'react-router-dom';
 
 import './register.styles.scss';
 
 class Register extends React.Component{
-    constructor(){
+    constructor(props){
         super()
         this.state= {
             email: '',
@@ -23,6 +24,9 @@ class Register extends React.Component{
 
     error = (err) => {
         this.setState({error: err})
+        setTimeout(() => {
+            this.setState({error: null})
+        }, 3000)
     }
 
     onSubmitRegister = () => {
@@ -38,13 +42,13 @@ class Register extends React.Component{
                     password: this.state.password
                 })
             })
-                .then( response => response.json())
-                .then(user => {
-                    // if(user.id){
-                    //   this.props.loadUser(user);
-                    //   this.props.onRouteChange('home');
-                    // }
-                })
+            .then( response => response.json())
+            .then(user => {
+                if(user.id){
+                    // this.props.userUpdate(user);
+                    this.props.history.push("/");
+                }
+            })
         }else{
             this.error("Passwords don't match!")
         }
@@ -118,4 +122,4 @@ class Register extends React.Component{
         
 }
 
-export default Register;
+export default withRouter(Register);

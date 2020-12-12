@@ -17,6 +17,27 @@ class LogIn extends React.Component{
         this.setState({[name]: value})
     }
 
+    onSubmitSignIn = () => {
+        fetch('http://localhost:8080/user/signIn', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                email: this.state.email,
+                password: this.state.password
+            })
+        })
+            .then( response => response.json())
+            .then(user => {
+                if(user.id){
+                //   this.props.loadUser(user);
+                //   this.props.onRouteChange('home');
+                // this.props.history.push("/");
+                }
+                console.log(user)
+            })
+        
+    }
+
     render(){
         return(
            <div className="logIn">
@@ -44,7 +65,7 @@ class LogIn extends React.Component{
                             />
                         </Form.Group>
                         <div className="logInButton">
-                            <Button variant="success" className="but">Sign In</Button>
+                            <Button variant="success" className="but" onClick={this.onSubmitSignIn}>Sign In</Button>
                         </div>
                    </Form>
                </div>

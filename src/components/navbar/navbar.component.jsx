@@ -5,7 +5,7 @@ import React from 'react';
 
 import './navbar.styles.scss'
 
-const NavbarKD = () => (
+const NavbarKD = (signOut, user) => (
 
 <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
     <Navbar.Brand href="/">My Library</Navbar.Brand>
@@ -23,17 +23,23 @@ const NavbarKD = () => (
         </NavDropdown>
         </Nav>
     <Nav >
-        <Nav.Link href="#features">
-            <Link to='/login' className="navbar-link" >
-                Log in
-            </Link> 
-        </Nav.Link>
-        <Nav.Link href="#features">
-            <Link to='/register' className="navbar-link"  >
-                Register
-            </Link>
-        </Nav.Link>
-         
+        {user.id ? 
+            <Nav.Link href="#features" 
+                onClick={signOut} 
+                className="navbar-link">
+                Sign out
+            </Nav.Link>
+        : 
+            <div>
+                    <Link to='/login' className="navbar-link" >
+                        Login
+                    </Link> 
+                    <Link to='/register' className="navbar-link"  >
+                        Register
+                    </Link>
+            </div>
+        } 
+ 
     </Nav>
     </Navbar.Collapse>
 </Navbar>
