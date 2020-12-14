@@ -1,5 +1,6 @@
 import React from 'react';
-import {Form, Col, Image } from 'react-bootstrap'
+import {withRouter} from 'react-router-dom';
+import {Form, Col, Image } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import bsCustomFileInput from 'bs-custom-file-input'
@@ -144,10 +145,7 @@ class BookDetails extends React.Component  {
           })
     }
 
-    
-
     render(){
-        
         return(
             <div className="bookdetails">
                 <div className="form">
@@ -250,4 +248,4 @@ class BookDetails extends React.Component  {
         )}
     };
 
-export default BookDetails;
+export default withRouter(BookDetails);

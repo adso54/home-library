@@ -6,10 +6,13 @@ import './App.css';
 //Pages:
 import HomePage from './pages/homepage/homepage.component';
 import BookDetails from './pages/bookdetails/bookdetails.component';
-import Register from './pages/register/register.component'
-import LogIn from './pages/login/login.component'
+import Register from './pages/register/register.component';
+import LogIn from './pages/login/login.component';
 //Components
 import NavbarKD from './components/navbar/navbar.component';
+import Message from './components/message/message.component';
+//Utilities
+import VARIANT from './assets/communicate-variants.js';
 
 class App extends React.Component {
   constructor(props){
@@ -20,6 +23,10 @@ class App extends React.Component {
         email: null,
         firstName: null,
         lastName: null
+      },
+      message: {
+        text: null,
+        variant: null
       }
     }
   }
@@ -48,6 +55,26 @@ class App extends React.Component {
     }))
   }
 
+  communicateHandler = (text, variant) =>{ 
+    this.setState(state => ({ 
+      ...state,
+      message: {
+        text: text,
+        variant: variant
+      }
+    }))
+    setTimeout(()=> {
+      this.setState(state => ({ 
+        ...state,
+        message: {
+          text: null,
+          variant: null
+        }
+      }))
+    }, 5000) 
+  }
+  
+
   userSignIn = (email, password) => {
     fetch('http://localhost:8080/user/signIn', {
         method: 'POST',
@@ -62,11 +89,37 @@ class App extends React.Component {
             if(user.id){
               this.userUpdate(user);          
               this.props.history.push("/");
+            }else{
+              this.communicateHandler("Bad credentials!", VARIANT.DANGER)
             }
-            
         })
-    
   }
+
+  userRegister = (firstName, lastName, email, password, confirmPassword) => {
+    if(password === confirmPassword){
+        fetch('http://localhost:8080/user/register', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: password
+            })
+        })
+        .then( response => response.json())
+        .then(user => {
+            if(user.id){
+                this.userUpdate(user);
+                this.communicateHandler("Registration successed!", VARIANT.SUCCESS)
+                this.props.history.push("/");
+            }
+        })
+    }else{
+      this.communicateHandler("Passwords don't match!", VARIANT.DANGER)
+    }
+    
+}
 
   render(){
     return (
@@ -75,18 +128,29 @@ class App extends React.Component {
             signOut={this.signOut}
             user={this.state.user}
           />
+          {this.state.message.text ? 
+              <Message 
+                text={this.state.message.text} 
+                variant={this.state.message.variant}
+              />
+            : 
+            null
+          }
           <Switch>
             <Route exact path="/" user={this.state.user}  component={HomePage} />
-            <Route path="/bookdetails/:id" user={this.state.user} component={BookDetails} />
+            <Route path="/bookdetails/:id" 
+              render={() => (
+                <BookDetails user={this.state.user} />
+              )}
+            />
             <Route path="/register"  
               render={() => (
-                <Register userUpdate = {this.userUpdate} />
+                <Register userRegister={this.userRegister} />
               )}
             />
             <Route path="/login" 
               render={() => (
                 <LogIn 
-                  userUpdate = {this.userUpdate}
                   userSignIn={this.userSignIn}
                 />)}
             />

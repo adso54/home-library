@@ -1,5 +1,5 @@
 import React from 'react';
-import {Form, Col, Button, Alert} from 'react-bootstrap';
+import {Form, Col, Button} from 'react-bootstrap';
 import {withRouter} from 'react-router-dom';
 
 import './register.styles.scss';
@@ -13,46 +13,12 @@ class Register extends React.Component{
             confirmPassword: '',
             firstName:'',
             lastName: '',
-            error: null,
         }
     }
 
     handleChange = (e) =>{
         const {name, value} = e.target;
         this.setState({[name]: value})
-    }
-
-    error = (err) => {
-        this.setState({error: err})
-        setTimeout(() => {
-            this.setState({error: null})
-        }, 3000)
-    }
-
-    onSubmitRegister = () => {
-        if(this.state.password === this.state.confirmPassword){
-            this.error(null)
-            fetch('http://localhost:8080/user/register', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    firstName: this.state.firstName,
-                    lastName: this.state.lastName,
-                    email: this.state.email,
-                    password: this.state.password
-                })
-            })
-            .then( response => response.json())
-            .then(user => {
-                if(user.id){
-                    // this.props.userUpdate(user);
-                    this.props.history.push("/");
-                }
-            })
-        }else{
-            this.error("Passwords don't match!")
-        }
-        
     }
 
     render(){
@@ -105,14 +71,10 @@ class Register extends React.Component{
                                 name="confirmPassword"
                             />
                         </Form.Group>
-                        {this.state.error !== null ? 
-                            <Alert variant='danger'>
-                                {this.state.error}
-                            </Alert>
-                            : null
-                        }
                         <div className="registerButton">
-                            <Button variant="success" className="but" onClick={this.onSubmitRegister}>Register</Button>
+                            <Button variant="success" className="but" onClick=
+                                {()=> this.props.userRegister(this.state.firstName, this.state.lastName, this.state.email, this.state.password, this.state.confirmPassword)}
+                            >Register</Button>
                         </div>
                    </Form>
                </div>
