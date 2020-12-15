@@ -71,7 +71,7 @@ class App extends React.Component {
           variant: null
         }
       }))
-    }, 5000) 
+    }, 3000) 
   }
   
 
@@ -87,7 +87,8 @@ class App extends React.Component {
         .then( response => response.json())
         .then(user => {
             if(user.id){
-              this.userUpdate(user);          
+              this.userUpdate(user);   
+              this.communicateHandler("Login successed!", VARIANT.SUCCESS)       
               this.props.history.push("/");
             }else{
               this.communicateHandler("Bad credentials!", VARIANT.DANGER)
@@ -136,25 +137,31 @@ class App extends React.Component {
             : 
             null
           }
-          <Switch>
-            <Route exact path="/" user={this.state.user}  component={HomePage} />
-            <Route path="/bookdetails/:id" 
-              render={() => (
-                <BookDetails user={this.state.user} />
-              )}
+          {this.state.user.id ?
+            <Switch>
+              <Route exact path="/" user={this.state.user}  component={HomePage} />
+              <Route path="/bookdetails/:id" 
+                render={() => (
+                  <BookDetails user={this.state.user}/>
+                )}
+              />
+              <Route path="/register"  
+                render={() => (
+                  <Register userRegister={this.userRegister} />
+                )}
+              />
+              <Route path="/login" 
+                render={() => (
+                  <LogIn 
+                    userSignIn={this.userSignIn}
+                  />)}
+              />
+            </Switch>
+          :
+            <LogIn 
+              userSignIn={this.userSignIn}
             />
-            <Route path="/register"  
-              render={() => (
-                <Register userRegister={this.userRegister} />
-              )}
-            />
-            <Route path="/login" 
-              render={() => (
-                <LogIn 
-                  userSignIn={this.userSignIn}
-                />)}
-            />
-          </Switch>
+          }
       </div>
     );
   }

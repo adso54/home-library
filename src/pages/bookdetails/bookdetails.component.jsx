@@ -20,7 +20,9 @@ class BookDetails extends React.Component  {
             ],
             categories: [''],
             startDate: new Date(), 
+            description: '',
             comments: '',
+            fileUrl: null,
             file: null     
         }
     
@@ -141,8 +143,21 @@ class BookDetails extends React.Component  {
 
     handleImageChange = (e) => {
         this.setState({
-            file: URL.createObjectURL(e.target.files[0])
+            file: e.target.files[0],
+            fileUrl: URL.createObjectURL(e.target.files[0])
           })
+    }
+
+    handleComments = (e) =>{
+        this.setState({
+            comments: e.target.value
+        })
+    }
+
+    handleDescription = (e) =>{
+        this.setState({
+            description: e.target.value
+        })
     }
 
     render(){
@@ -211,8 +226,12 @@ class BookDetails extends React.Component  {
                             </div>
                         </Form.Group>
                         <Form.Group as={Col}>
-                            <Form.Label className='label' >Comments</Form.Label>
-                            <Form.Control as="textarea" aria-label="Comments" />
+                            <Form.Label className='label' >Description</Form.Label>
+                            <Form.Control as="textarea" aria-label="Comments" value={this.state.description} onChange={this.handleDescription}/>
+                        </Form.Group>
+                        <Form.Group as={Col}>
+                            <Form.Label className='label' >My comments</Form.Label>
+                            <Form.Control as="textarea" aria-label="Comments" value={this.state.comments} onChange={this.handleComments} />
                         </Form.Group>
                         <Form.Group as={Col}>
                             <Form.Label className='label' >Read date </Form.Label>
@@ -235,7 +254,7 @@ class BookDetails extends React.Component  {
 
                 </div>
                 <div className="rightContainer">
-                    <Image className="image" src={this.state.file} rounded />
+                    <Image className="image" src={this.state.fileUrl} rounded />
                     <Form.File 
                         id="custom-file"
                         label="Custom file input"
@@ -243,7 +262,7 @@ class BookDetails extends React.Component  {
                         onChange={this.handleImageChange}
                     />
                 </div>
-    
+                
             </div>
         )}
     };
