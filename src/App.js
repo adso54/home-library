@@ -31,19 +31,25 @@ class App extends React.Component {
     }
   }
 
+
+
   userUpdate = (user) => {
-      this.setState(state => ({
-        ...state,  
-        user: {
-          id: user.id,
-          email: user.email,
-          firstName: user.first_name,
-          lastName: user.last_name
-        }
-    }))
+      this.setState(state => {
+        window.localStorage.setItem('user', JSON.stringify(user))
+        return(
+          { ...state,  
+            user: {
+              id: user.id,
+              email: user.email,
+              firstName: user.first_name,
+              lastName: user.last_name
+            }}
+        )
+    })  
   }
 
   signOut = () => {
+    window.localStorage.setItem('user', null)
     this.setState(state =>({
       ...state,
       user: {
@@ -118,8 +124,14 @@ class App extends React.Component {
         })
     }else{
       this.communicateHandler("Passwords don't match!", VARIANT.DANGER)
-    }
-    
+    }  
+}
+
+componentDidMount(){
+  let user = JSON.parse(window.localStorage.getItem('user'))
+  if(user){
+    this.userUpdate(user)
+  }
 }
 
   render(){
