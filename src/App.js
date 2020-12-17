@@ -31,8 +31,6 @@ class App extends React.Component {
     }
   }
 
-
-
   userUpdate = (user) => {
       this.setState(state => {
         window.localStorage.setItem('user', JSON.stringify(user))

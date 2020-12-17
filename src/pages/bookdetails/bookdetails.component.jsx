@@ -1,6 +1,6 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
-import {Form, Col, Image } from 'react-bootstrap';
+import {Form, Col, Image, Button } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import bsCustomFileInput from 'bs-custom-file-input'
@@ -12,6 +12,7 @@ class BookDetails extends React.Component  {
     constructor() {
         super();
         this.state = {
+            title: '',
             authors: [
                 {   
                     firstName: '', 
@@ -154,11 +155,61 @@ class BookDetails extends React.Component  {
         })
     }
 
+    handleTitle = (e) =>{
+        this.setState({
+            title: e.target.value
+        })
+    }
+
     handleDescription = (e) =>{
         this.setState({
             description: e.target.value
         })
     }
+
+    handleSubmit = () => {
+            console.log(this.state.file)
+            fetch('http://localhost:8080/book', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    title: this.state.title,
+                    image: this.state.file
+                })
+            })
+                .then( response => response.json())
+                .then(book => {
+                    console.log(book)
+                    // if(user.id){
+                    //   this.userUpdate(user);   
+                    //   this.communicateHandler("Login successed!", VARIANT.SUCCESS)       
+                    //   this.props.history.push("/");
+                    // }else{
+                    //   this.communicateHandler("Bad credentials!", VARIANT.DANGER)
+                    // }
+            })
+    }
+
+    handleGet= () => {
+        fetch('http://localhost:8080/book', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                id: '4'
+            })
+        })
+            .then( response => response.json())
+            .then(book => {
+                this.setState( state => ({
+                    ...state,
+                    file: book.image
+                }))
+                this.setState( state => ({
+                    ...state,
+                    fileUrl: URL.createObjectURL(book.image)
+                }))
+        })
+}
 
     render(){
         return(
@@ -167,7 +218,7 @@ class BookDetails extends React.Component  {
                     <Form >
                         <Form.Group as={Col} controlId="formGridTitle" >
                             <Form.Label className='label' >Title</Form.Label>
-                            <Form.Control type="text" placeholder="Enter title" />
+                            <Form.Control type="text" placeholder="Enter title" value={this.state.title} onChange={this.handleTitle} />
                         </Form.Group>
                         <Form.Group as={Col} >
                             <Form.Label className='label' >Authors</Form.Label>
@@ -250,8 +301,11 @@ class BookDetails extends React.Component  {
 
                             />
                         </Form.Group>
+                        <div className="addButton">
+                            <Button variant='success' onClick={this.handleSubmit} >Add book</Button>
+                            <Button variant='success' onClick={this.handleGet} >Get book</Button>
+                        </div>
                     </Form>
-
                 </div>
                 <div className="rightContainer">
                     <Image className="image" src={this.state.fileUrl} rounded />
