@@ -143,10 +143,18 @@ class BookDetails extends React.Component  {
     }
 
     handleImageChange = (e) => {
-        this.setState({
-            file: e.target.files[0],
-            fileUrl: URL.createObjectURL(e.target.files[0])
-          })
+        // let reader = new FileReader();
+        let fileInput = e.target.files[0];
+        // console.log(fileInput)
+        // reader.readAsDataURL(fileInput);
+        // console.log(reader)
+        // reader.onload = () => {
+            this.setState({
+                file: fileInput,
+                fileUrl: URL.createObjectURL(fileInput)
+              })
+        // }
+        
     }
 
     handleComments = (e) =>{
@@ -168,26 +176,36 @@ class BookDetails extends React.Component  {
     }
 
     handleSubmit = () => {
-            console.log(this.state.file)
-            fetch('http://localhost:8080/book', {
+            const formData = new FormData();
+            formData.append('file', this.state.file);
+            fetch('http://localhost:8080/book/upload',{
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    title: this.state.title,
-                    image: this.state.file
-                })
+                body: formData
             })
-                .then( response => response.json())
-                .then(book => {
-                    console.log(book)
-                    // if(user.id){
-                    //   this.userUpdate(user);   
-                    //   this.communicateHandler("Login successed!", VARIANT.SUCCESS)       
-                    //   this.props.history.push("/");
-                    // }else{
-                    //   this.communicateHandler("Bad credentials!", VARIANT.DANGER)
-                    // }
-            })
+            .then(res => { // then print response status
+                console.log(res.statusText)
+             })
+
+            // console.log(this.state.file)
+            // fetch('http://localhost:8080/book', {
+            //     method: 'POST',
+            //     headers: {'Content-Type': 'application/json'},
+            //     body: JSON.stringify({
+            //         title: this.state.title,
+            //         image: this.state.file
+            //     })
+            // })
+            //     .then( response => response.json())
+            //     .then(book => {
+            //         console.log(book)
+            //         // if(user.id){
+            //         //   this.userUpdate(user);   
+            //         //   this.communicateHandler("Login successed!", VARIANT.SUCCESS)       
+            //         //   this.props.history.push("/");
+            //         // }else{
+            //         //   this.communicateHandler("Bad credentials!", VARIANT.DANGER)
+            //         // }
+            // })
     }
 
     handleGet= () => {
@@ -195,19 +213,23 @@ class BookDetails extends React.Component  {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                id: '4'
+                id: '14'
             })
         })
-            .then( response => response.json())
+            .then( response => {
+                console.log(response);
+                response.json();
+            })
             .then(book => {
+                console.log(book)
                 this.setState( state => ({
                     ...state,
                     file: book.image
                 }))
-                this.setState( state => ({
-                    ...state,
-                    fileUrl: URL.createObjectURL(book.image)
-                }))
+                // this.setState( state => ({
+                //     ...state,
+                //     fileUrl: URL.createObjectURL(book.image)
+                // }))
         })
 }
 
