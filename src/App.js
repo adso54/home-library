@@ -155,6 +155,11 @@ componentDidMount(){
                   <BookDetails user={this.state.user}/>
                 )}
               />
+              <Route path="/bookdetails" 
+                render={() => (
+                  <BookDetails user={this.state.user}/>
+                )}
+              />
               <Route path="/register"  
                 render={() => (
                   <Register userRegister={this.userRegister} />

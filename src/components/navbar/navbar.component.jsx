@@ -13,7 +13,9 @@ const NavbarKD = ({signOut, user}) => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
-                <Nav.Link href="#features">{user.firstName}</Nav.Link>
+                <Link to='/bookdetails' className="navbar-link" >
+                                Add book
+                            </Link> 
                 <Nav.Link href="#pricing">Pricing</Nav.Link>
                 <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
                     <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>

@@ -15,8 +15,7 @@ class BookDetails extends React.Component  {
             title: '',
             authors: [
                 {   
-                    firstName: '', 
-                    lastName: ''    
+                    name: ''  
                 },
             ],
             categories: [''],
@@ -49,40 +48,17 @@ class BookDetails extends React.Component  {
         })         
     }
 
-    handleFirstNameChange = (elementIndex, event) =>{
+    handleNameChange = (elementIndex, event) =>{
         const value = event.target.value
         this.setState(state => {
             const authors = state.authors.map((author, authorIndex)=>{
                 if(authorIndex===elementIndex){
                     return {
-                        firstName: value, 
-                        lastName: author.lastName
+                        name: value,
                     }
                 }else{
                     return {
-                        firstName: author.firstName, 
-                        lastName: author.lastName
-                    }     
-                }
-            }
-            )
-            return {authors: authors}
-        })         
-    }
-
-    handleLastNameChange = (elementIndex, event) =>{
-        const value = event.target.value
-        this.setState(state => {
-            const authors = state.authors.map((author, authorIndex)=>{
-                if(authorIndex===elementIndex){
-                    return {
-                        firstName: author.firstName,
-                        lastName: value
-                    }
-                }else{
-                    return {
-                        firstName: author.firstName, 
-                        lastName: author.lastName
+                        name: author.name, 
                     }     
                 }
             }
@@ -98,8 +74,7 @@ class BookDetails extends React.Component  {
     addAuthorHandler = (e) =>{
         this.setState(state => {
             const authors = state.authors.concat({ 
-                firstName: '', 
-                lastName: '' 
+                name: '', 
             })
 
             return {authors: authors};
@@ -118,8 +93,7 @@ class BookDetails extends React.Component  {
             if(state.authors.length === 1){
                 return {authors:[
                         { 
-                            firstName: '', 
-                            lastName: '' 
+                            name: '',
                         }
                     ]
             }
@@ -143,18 +117,11 @@ class BookDetails extends React.Component  {
     }
 
     handleImageChange = (e) => {
-        // let reader = new FileReader();
         let fileInput = e.target.files[0];
-        // console.log(fileInput)
-        // reader.readAsDataURL(fileInput);
-        // console.log(reader)
-        // reader.onload = () => {
             this.setState({
                 file: fileInput,
                 fileUrl: URL.createObjectURL(fileInput)
-              })
-        // }
-        
+              })        
     }
 
     handleComments = (e) =>{
@@ -178,13 +145,16 @@ class BookDetails extends React.Component  {
     handleSubmit = () => {
             const formData = new FormData();
             formData.append('file', this.state.file);
+            formData.append('authors', JSON.stringify(this.state.authors));
+            formData.append('title', this.state.title);
+
             fetch('http://localhost:8080/book/upload',{
                 method: 'POST',
                 body: formData
             })
-            .then(res => { // then print response status
-                console.log(res.statusText)
-             })
+            .then(res => res.json())
+            .then(bookId => console.log(bookId))
+
 
             // console.log(this.state.file)
             // fetch('http://localhost:8080/book', {
@@ -208,31 +178,6 @@ class BookDetails extends React.Component  {
             // })
     }
 
-    handleGet= () => {
-        fetch('http://localhost:8080/book', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                id: '14'
-            })
-        })
-            .then( response => {
-                console.log(response);
-                response.json();
-            })
-            .then(book => {
-                console.log(book)
-                this.setState( state => ({
-                    ...state,
-                    file: book.image
-                }))
-                // this.setState( state => ({
-                //     ...state,
-                //     fileUrl: URL.createObjectURL(book.image)
-                // }))
-        })
-}
-
     render(){
         return(
             <div className="bookdetails">
@@ -248,19 +193,13 @@ class BookDetails extends React.Component  {
                             {this.state.authors.map((author, index) =>(
                                 <div className="authors" key={index}>
                                     <Form.Control 
-                                        id={`firstName ${index}`}
+                                        id={`name ${index}`}
                                         type="text" 
-                                        placeholder="First name" 
-                                        value={author.firstName} 
-                                        onChange={(event) => this.handleFirstNameChange(index,event)}
+                                        placeholder="Name" 
+                                        value={author.name} 
+                                        onChange={(event) => this.handleNameChange(index,event)}
                                     />
-                                    <Form.Control 
-                                        id={`lastName ${index}`}
-                                        type="text" 
-                                        placeholder="Last name" 
-                                        value={author.lastName} 
-                                        onChange={(event) => this.handleLastNameChange(index,event)}
-                                    />
+
                                     <div className='deleteItem' onClick={(event) => this.deleteAuthorHandler(index, event)}>
                                         <i className="far fa-trash-alt"></i>   
                                     </div>
@@ -279,7 +218,7 @@ class BookDetails extends React.Component  {
                             {this.state.categories.map((category, index) =>(
                                 <div className="authors" key={index}>
                                     <Form.Control 
-                                        id={`firstName ${index}`}
+                                        id={`name ${index}`}
                                         type="text" 
                                         placeholder="Category" 
                                         value={category} 
@@ -324,8 +263,7 @@ class BookDetails extends React.Component  {
                             />
                         </Form.Group>
                         <div className="addButton">
-                            <Button variant='success' onClick={this.handleSubmit} >Add book</Button>
-                            <Button variant='success' onClick={this.handleGet} >Get book</Button>
+                            <Button variant='secondary' onClick={this.handleSubmit} >Add book</Button>
                         </div>
                     </Form>
                 </div>
