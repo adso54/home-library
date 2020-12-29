@@ -19,18 +19,19 @@ class BookDetails extends React.Component  {
                 },
             ],
             categories: [''],
-            startDate: new Date(), 
+            readDate: new Date(), 
             description: '',
             comments: '',
             fileUrl: null,
-            file: null     
+            file: null,
+            userId: null,     
         }
-    
-        
     }
 
     componentDidMount = () => {
         bsCustomFileInput.init();
+        this.setState({userId: this.props.user.id})
+        console.log(this.props)
     }
 
     handleCategory = (elementIndex, event) =>{
@@ -67,8 +68,8 @@ class BookDetails extends React.Component  {
         })         
     }
 
-    handleStartDateChange = (date) =>{
-        this.setState({startDate: date})
+    handleReadDateChange = (date) =>{
+        this.setState({readDate: date})
     }
 
     addAuthorHandler = (e) =>{
@@ -146,36 +147,19 @@ class BookDetails extends React.Component  {
             const formData = new FormData();
             formData.append('file', this.state.file);
             formData.append('authors', JSON.stringify(this.state.authors));
+            formData.append('categories', JSON.stringify(this.state.categories));
+            formData.append('description', this.state.description);
             formData.append('title', this.state.title);
+            formData.append('myComments', this.state.comments);
+            formData.append('readDate', this.state.readDate);
+            formData.append('userId', this.state.userId);
 
-            fetch('http://localhost:8080/book/upload',{
+            fetch('http://localhost:8080/book',{
                 method: 'POST',
                 body: formData
             })
             .then(res => res.json())
             .then(bookId => console.log(bookId))
-
-
-            // console.log(this.state.file)
-            // fetch('http://localhost:8080/book', {
-            //     method: 'POST',
-            //     headers: {'Content-Type': 'application/json'},
-            //     body: JSON.stringify({
-            //         title: this.state.title,
-            //         image: this.state.file
-            //     })
-            // })
-            //     .then( response => response.json())
-            //     .then(book => {
-            //         console.log(book)
-            //         // if(user.id){
-            //         //   this.userUpdate(user);   
-            //         //   this.communicateHandler("Login successed!", VARIANT.SUCCESS)       
-            //         //   this.props.history.push("/");
-            //         // }else{
-            //         //   this.communicateHandler("Bad credentials!", VARIANT.DANGER)
-            //         // }
-            // })
     }
 
     render(){
@@ -249,14 +233,14 @@ class BookDetails extends React.Component  {
                             <Form.Label className='label' >Read date </Form.Label>
                             <DatePicker 
                                 className='datepicker'
-                                selected={this.state.startDate} 
-                                onChange={date => this.handleStartDateChange(date)}
+                                selected={this.state.readDate} 
+                                onChange={date => this.handleReadDateChange(date)}
                                 dateFormat="yyyy-MM-dd"
                                 customInput={ 
                                     <Form.Control 
                                         id='readDate'
                                         type="text" 
-                                        value={this.state.startDate}
+                                        value={this.state.readDate}
                                     />
                                 }
 
