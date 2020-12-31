@@ -152,12 +152,12 @@ componentDidMount(){
               <Route exact path="/" user={this.state.user}  component={HomePage} />
               <Route path="/bookdetails/:id" 
                 render={() => (
-                  <BookDetails user={this.state.user}/>
+                  <BookDetails user={this.state.user} communicateHandler={(text, variant) => this.communicateHandler(text, variant)}/>
                 )}
               />
               <Route path="/bookdetails" 
                 render={() => (
-                  <BookDetails user={this.state.user}/>
+                  <BookDetails user={this.state.user} communicateHandler={(text, variant) => this.communicateHandler(text, variant)}/>
                 )}
               />
               <Route path="/register"  

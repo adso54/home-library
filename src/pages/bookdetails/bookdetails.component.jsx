@@ -3,7 +3,8 @@ import {withRouter} from 'react-router-dom';
 import {Form, Col, Image, Button } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import bsCustomFileInput from 'bs-custom-file-input'
+import bsCustomFileInput from 'bs-custom-file-input';
+import VARIANT from '../../assets/communicate-variants.js';
 
 
 import './bookdetails.styles.scss';
@@ -150,7 +151,7 @@ class BookDetails extends React.Component  {
             formData.append('categories', JSON.stringify(this.state.categories));
             formData.append('description', this.state.description);
             formData.append('title', this.state.title);
-            formData.append('myComments', this.state.comments);
+            formData.append('comments', this.state.comments);
             formData.append('readDate', this.state.readDate);
             formData.append('userId', this.state.userId);
 
@@ -159,7 +160,13 @@ class BookDetails extends React.Component  {
                 body: formData
             })
             .then(res => res.json())
-            .then(bookId => console.log(bookId))
+            .then(bookId => {
+                if(bookId !==null) {
+                    this.props.communicateHandler('Book successful added!', VARIANT.SUCCESS)
+                }else{
+                    this.props.communicateHandler('An error occured!', VARIANT.DANGER)
+                }
+            })
     }
 
     render(){
