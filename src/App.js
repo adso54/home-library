@@ -149,7 +149,11 @@ componentDidMount(){
           }
           {this.state.user.id ?
             <Switch>
-              <Route exact path="/" user={this.state.user}  component={HomePage} />
+              <Route exact path="/" 
+                render={() => (
+                  <HomePage user={this.state.user} />
+                )}
+               />
               <Route path="/bookdetails/:id" 
                 render={() => (
                   <BookDetails user={this.state.user} communicateHandler={(text, variant) => this.communicateHandler(text, variant)}/>

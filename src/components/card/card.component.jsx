@@ -5,15 +5,20 @@ import { Link } from 'react-router-dom';
 import './card.styles.scss'
 
 const CardKD = ({book}) => {
-    const {id, title, imgUrl, authors, categories} = book;
+    const {id, title, image_url, authors, categories} = book;
+    const imageURL = 'http://localhost:8080/' + image_url
     let authorsInLine = ''
     let categoriesInLine =''
-    authors.forEach(author =>(
-        authorsInLine ? authorsInLine += ', ' + author : authorsInLine = author
-    ))
-    categories.forEach(category =>(
-        categoriesInLine ? categoriesInLine += ', ' + category : categoriesInLine = category
-    ))
+    if(authors){
+        authors.forEach(author =>(
+            authorsInLine ? authorsInLine += ', ' + author : authorsInLine = author
+        ))
+    }
+    if(categories){
+        categories.forEach(category =>(
+            categoriesInLine ? categoriesInLine += ', ' + category : categoriesInLine = category
+        ))
+    }
     return(
     <Card 
     bg={'dark'}
@@ -21,7 +26,7 @@ const CardKD = ({book}) => {
     text={'white'}
     className=" card"
     >
-       <Card.Img variant="top" src={imgUrl} className = "image" />
+       <Card.Img variant="top" src={imageURL} className = "image" />
        <Card.Body>
            <Card.Title>{title}</Card.Title>
             <Card.Header>{authorsInLine}</Card.Header>

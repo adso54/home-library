@@ -32,7 +32,6 @@ class BookDetails extends React.Component  {
     componentDidMount = () => {
         bsCustomFileInput.init();
         this.setState({userId: this.props.user.id})
-        console.log(this.props)
     }
 
     handleCategory = (elementIndex, event) =>{
