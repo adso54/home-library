@@ -5,18 +5,18 @@ import { Link } from 'react-router-dom';
 import './card.styles.scss'
 
 const CardKD = ({book}) => {
-    const {id, title, image_url, authors, categories} = book;
+    const {id, title, image_url, author, category} = book;
     const imageURL = 'http://localhost:8080/' + image_url
     let authorsInLine = ''
     let categoriesInLine =''
-    if(authors){
-        authors.forEach(author =>(
-            authorsInLine ? authorsInLine += ', ' + author : authorsInLine = author
+    if(author){
+        author.forEach(author =>(
+            authorsInLine ? authorsInLine += ', ' + author.name : authorsInLine = author.name
         ))
     }
-    if(categories){
-        categories.forEach(category =>(
-            categoriesInLine ? categoriesInLine += ', ' + category : categoriesInLine = category
+    if(category){
+        category.forEach(category =>(
+            categoriesInLine ? categoriesInLine += ', ' + category.category : categoriesInLine = category.category
         ))
     }
     return(
