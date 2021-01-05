@@ -154,7 +154,7 @@ componentDidMount(){
                   <HomePage user={this.state.user} />
                 )}
                />
-              <Route path="/bookdetails/:id" 
+              <Route path="/bookdetails/:bookId" 
                 render={() => (
                   <BookDetails user={this.state.user} communicateHandler={(text, variant) => this.communicateHandler(text, variant)}/>
                 )}

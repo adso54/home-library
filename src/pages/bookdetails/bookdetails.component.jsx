@@ -25,13 +25,49 @@ class BookDetails extends React.Component  {
             comments: '',
             fileUrl: null,
             file: null,
-            userId: null,     
+            userId: null,
+            bookId: null     
         }
     }
 
     componentDidMount = () => {
         bsCustomFileInput.init();
-        this.setState({userId: this.props.user.id})
+        const bookId = this.props.match.params.bookId;
+        this.setState((state) => 
+           ({
+            ...state,
+            userId: this.props.user.id,
+            bookId: bookId,
+        }))
+        
+        if(bookId) {
+            fetch('http://localhost:8080/book/details',{
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    userId: this.props.user.id,
+                    bookId: bookId,
+                })
+            })
+            .then(res => res.json())
+            .then(book => {
+                const category = book.category.map((category) => {
+                    return category.category
+                })
+
+                this.setState(state =>({
+                    ...state,
+                    title: book.title,
+                    authors: book.author,
+                    categories: category,
+                    description: book.description,
+                    comments: book.comments,
+                    readDate: new Date(book.read_date),
+                    fileUrl: 'http://localhost:8080/' + book.image_url,
+                }))
+            })
+            .catch(err => console.log(err))
+        }
     }
 
     handleCategory = (elementIndex, event) =>{
