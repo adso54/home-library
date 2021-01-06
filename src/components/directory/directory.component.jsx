@@ -41,9 +41,14 @@ class Directory extends React.Component {
     render() {
         return(
             <div className = "directory">
-                {this.state.books.map((book) =>(
-                    <CardKD key={book.id} book={book} />
-                ))}
+                {(this.state.books.length > 0 )? 
+                    this.state.books.map((book) =>(
+                        <CardKD key={book.id} book={book} />
+                    ))
+                    :
+                    <div className="noBooks">Pusto</div>
+                }
+                
             </div>  
         )}
 }

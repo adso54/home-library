@@ -177,9 +177,25 @@ componentDidMount(){
               />
             </Switch>
           :
-            <LogIn 
-              userSignIn={this.userSignIn}
-            />
+          <Switch>
+            <Route path="/register"  
+                render={() => (
+                  <Register userRegister={this.userRegister} />
+                )}
+              />
+              <Route path="/login" 
+                render={() => (
+                  <LogIn 
+                    userSignIn={this.userSignIn}
+                  />)}
+              />
+               <Route  path="/" 
+                render={() => (
+                  <LogIn 
+                    userSignIn={this.userSignIn}
+                  />)}
+               />
+          </Switch>
           }
       </div>
     );

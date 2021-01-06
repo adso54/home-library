@@ -1,4 +1,4 @@
-import {Navbar, NavDropdown, Nav} from 'react-bootstrap';
+import {Navbar, Nav} from 'react-bootstrap'; //NavDropdown,
 import {Link} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
@@ -16,14 +16,14 @@ const NavbarKD = ({signOut, user}) => {
                 <Link to='/bookdetails' className="navbar-link" >
                                 Add book
                             </Link> 
-                <Nav.Link href="#pricing">Pricing</Nav.Link>
+                {/* <Nav.Link href="#pricing">Pricing</Nav.Link>
                 <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
                     <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                     <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
                     <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                </NavDropdown>
+                </NavDropdown> */}
                 </Nav>
             <Nav >
                 {user.id ? 

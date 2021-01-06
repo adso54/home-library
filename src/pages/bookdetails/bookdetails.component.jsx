@@ -20,7 +20,7 @@ class BookDetails extends React.Component  {
                 },
             ],
             categories: [''],
-            readDate: new Date(), 
+            readDate: null, 
             description: '',
             comments: '',
             fileUrl: null,
@@ -54,6 +54,12 @@ class BookDetails extends React.Component  {
                 const category = book.category.map((category) => {
                     return category.category
                 })
+                let readDate = null
+                if(book.read_date!==null){
+                    readDate = new Date(book.read_date);
+                }else{
+                    readDate = null;
+                }
 
                 this.setState(state =>({
                     ...state,
@@ -62,7 +68,7 @@ class BookDetails extends React.Component  {
                     categories: category,
                     description: book.description,
                     comments: book.comments,
-                    readDate: new Date(book.read_date),
+                    readDate: readDate,
                     fileUrl: 'http://localhost:8080/' + book.image_url,
                 }))
             })
