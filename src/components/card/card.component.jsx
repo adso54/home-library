@@ -6,7 +6,7 @@ import './card.styles.scss'
 
 const CardKD = ({book}) => {
     const {id, title, image_url, author, category} = book;
-    const imageURL = 'http://localhost:8080/' + image_url
+    const imageURL = process.env.REACT_APP_SERV_ADRESS + '/' + image_url
     let authorsInLine = ''
     let categoriesInLine =''
     if(author){

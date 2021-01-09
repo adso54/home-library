@@ -80,7 +80,8 @@ class App extends React.Component {
   
 
   userSignIn = (email, password) => {
-    fetch('http://localhost:8080/user/signIn', {
+    console.log(process.env.REACT_APP_SERV_ADRESS + '/user/signIn')
+    fetch(process.env.REACT_APP_SERV_ADRESS + '/user/signIn', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -102,7 +103,7 @@ class App extends React.Component {
 
   userRegister = (firstName, lastName, email, password, confirmPassword) => {
     if(password === confirmPassword){
-        fetch('http://localhost:8080/user/register', {
+        fetch(process.env.REACT_APP_SERV_ADRESS + '/user/register', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

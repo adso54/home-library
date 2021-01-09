@@ -1,6 +1,5 @@
 import React from 'react';
-import CardKD from '../card/card.component'
-
+import CardKD from '../card/card.component';
 import './directory.styles.scss'
 
 class Directory extends React.Component {
@@ -22,7 +21,7 @@ class Directory extends React.Component {
             user: this.props.user
         }))
 
-        fetch('http://localhost:8080/book/allUserBooks',{
+        fetch(process.env.REACT_APP_SERV_ADRESS + '/book/allUserBooks',{
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({

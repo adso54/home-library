@@ -41,7 +41,7 @@ class BookDetails extends React.Component  {
         }))
         
         if(bookId) {
-            fetch('http://localhost:8080/book/details',{
+            fetch(process.env.REACT_APP_SERV_ADRESS + '/book/details',{
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -69,7 +69,7 @@ class BookDetails extends React.Component  {
                     description: book.description,
                     comments: book.comments,
                     readDate: readDate,
-                    fileUrl: 'http://localhost:8080/' + book.image_url,
+                    fileUrl: process.env.REACT_APP_SERV_ADRESS + '/' + book.image_url,
                 }))
             })
             .catch(err => console.log(err))
@@ -196,7 +196,7 @@ class BookDetails extends React.Component  {
             formData.append('readDate', this.state.readDate);
             formData.append('userId', this.state.userId);
 
-            fetch('http://localhost:8080/book',{
+            fetch(process.env.REACT_APP_SERV_ADRESS + '/book',{
                 method: 'POST',
                 body: formData
             })
