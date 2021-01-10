@@ -80,7 +80,6 @@ class App extends React.Component {
   
 
   userSignIn = (email, password) => {
-    console.log(process.env.REACT_APP_SERV_ADRESS + '/user/signIn')
     fetch(process.env.REACT_APP_SERV_ADRESS + '/user/signIn', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -99,6 +98,7 @@ class App extends React.Component {
               this.communicateHandler("Bad credentials!", VARIANT.DANGER)
             }
         })
+        .catch(err=>console.error(err))
   }
 
   userRegister = (firstName, lastName, email, password, confirmPassword) => {
@@ -121,6 +121,7 @@ class App extends React.Component {
                 this.props.history.push("/");
             }
         })
+        .catch(err=>console.error(err))
     }else{
       this.communicateHandler("Passwords don't match!", VARIANT.DANGER)
     }  
