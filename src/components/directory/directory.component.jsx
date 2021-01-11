@@ -28,9 +28,15 @@ class Directory extends React.Component {
                     userId: this.props.user.id
                 })
             })
-            .then(res => res.json())
+            .then(res => {
+                if(res.status===200){
+                    return res.json()
+                }else{ 
+                    console.log(res)
+                    return null
+                }
+            })
             .then(books => {
-                console.log(books)
                 this.setState(state =>({
                     ...state,
                     books: books
