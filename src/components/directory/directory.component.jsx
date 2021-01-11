@@ -30,6 +30,7 @@ class Directory extends React.Component {
             })
             .then(res => res.json())
             .then(books => {
+                console.log(books)
                 this.setState(state =>({
                     ...state,
                     books: books
