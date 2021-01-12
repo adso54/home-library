@@ -26,7 +26,7 @@ const CardKD = ({book}) => {
     text={'white'}
     className=" card"
     >
-       <Card.Img variant="top" src={imageURL} className = "image" />
+       <Card.Img variant="top" src={imageURL} className = "img" />
        <Card.Body>
            <Card.Title>{title}</Card.Title>
             <Card.Header>{authorsInLine}</Card.Header>
