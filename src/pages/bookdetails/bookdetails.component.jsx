@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import bsCustomFileInput from 'bs-custom-file-input';
 import VARIANT from '../../assets/communicate-variants.js';
+import { uploadImage } from '../../firebase/firebaseUtils.js';
 
 
 import './bookdetails.styles.scss';
@@ -186,16 +187,18 @@ class BookDetails extends React.Component  {
     }
 
     handleSubmit = () => {
-            const formData = new FormData();
-            formData.append('file', this.state.file);
-            formData.append('authors', JSON.stringify(this.state.authors));
-            formData.append('categories', JSON.stringify(this.state.categories));
-            formData.append('description', this.state.description);
-            formData.append('title', this.state.title);
-            formData.append('comments', this.state.comments);
-            formData.append('readDate', this.state.readDate);
-            formData.append('userId', this.state.userId);
+        const formData = new FormData();
+        formData.append('authors', JSON.stringify(this.state.authors));
+        formData.append('categories', JSON.stringify(this.state.categories));
+        formData.append('description', this.state.description);
+        formData.append('title', this.state.title);
+        formData.append('comments', this.state.comments);
+        formData.append('readDate', this.state.readDate);
+        formData.append('userId', this.state.userId);
 
+        uploadImage(this.state.file)
+        .then(imageUrl => formData.append('imageUrl', imageUrl))
+        .then(() => {
             fetch(process.env.REACT_APP_SERV_ADRESS + '/book',{
                 method: 'POST',
                 body: formData
@@ -208,6 +211,8 @@ class BookDetails extends React.Component  {
                     this.props.communicateHandler('An error occured!', VARIANT.DANGER)
                 }
             })
+            .catch(err => console.log(err))
+        })       
     }
 
     render(){
