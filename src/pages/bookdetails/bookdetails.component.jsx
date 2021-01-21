@@ -168,21 +168,10 @@ class BookDetails extends React.Component  {
               })        
     }
 
-    handleComments = (e) =>{
+    handleChange = (e) => {
+        const { name, value} = e.target
         this.setState({
-            comments: e.target.value
-        })
-    }
-
-    handleTitle = (e) =>{
-        this.setState({
-            title: e.target.value
-        })
-    }
-
-    handleDescription = (e) =>{
-        this.setState({
-            description: e.target.value
+            [name]: value
         })
     }
 
@@ -222,7 +211,7 @@ class BookDetails extends React.Component  {
                     <Form >
                         <Form.Group as={Col} controlId="formGridTitle" >
                             <Form.Label className='label' >Title</Form.Label>
-                            <Form.Control type="text" placeholder="Enter title" value={this.state.title} onChange={this.handleTitle} />
+                            <Form.Control type="text" placeholder="Enter title" value={this.state.title} onChange={this.handleChange} name="title" />
                         </Form.Group>
                         <Form.Group as={Col} >
                             <Form.Label className='label' >Authors</Form.Label>
@@ -276,11 +265,11 @@ class BookDetails extends React.Component  {
                         </Form.Group>
                         <Form.Group as={Col}>
                             <Form.Label className='label' >Description</Form.Label>
-                            <Form.Control as="textarea" aria-label="Comments" value={this.state.description} onChange={this.handleDescription}/>
+                            <Form.Control as="textarea" aria-label="Comments" name="description" value={this.state.description} onChange={this.handleChange}/>
                         </Form.Group>
                         <Form.Group as={Col}>
                             <Form.Label className='label' >My comments</Form.Label>
-                            <Form.Control as="textarea" aria-label="Comments" value={this.state.comments} onChange={this.handleComments} />
+                            <Form.Control as="textarea" aria-label="Comments" name="comments" value={this.state.comments} onChange={this.handleChange} />
                         </Form.Group>
                         <Form.Group as={Col}>
                             <Form.Label className='label' >Read date </Form.Label>
@@ -294,6 +283,7 @@ class BookDetails extends React.Component  {
                                         id='readDate'
                                         type="text" 
                                         value={this.state.readDate}
+                                        name="readDate"
                                     />
                                 }
 
