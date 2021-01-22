@@ -34,6 +34,7 @@ class BookDetails extends React.Component  {
     componentDidMount = () => {
         bsCustomFileInput.init();
         const bookId = this.props.match.params.bookId;
+        console.log(this.props.match)
         this.setState((state) => 
            ({
             ...state,
@@ -70,12 +71,22 @@ class BookDetails extends React.Component  {
                     description: book.description,
                     comments: book.comments,
                     readDate: readDate,
-                    fileUrl: process.env.REACT_APP_SERV_ADRESS + '/' + book.image_url,
+                    fileUrl: book.image_url,
                 }))
             })
             .catch(err => console.log(err))
         }
     }
+
+    componentDidUpdate(){
+        if(this.state.bookId && !this.props.match.params.bookId){ 
+            this.setState((state) => 
+            ({
+            ...state,
+            bookId: this.props.match.params.bookId,
+            }))
+        }
+      }
 
     handleCategory = (elementIndex, event) =>{
         const value = event.target.value
@@ -290,7 +301,9 @@ class BookDetails extends React.Component  {
                             />
                         </Form.Group>
                         <div className="addButton">
-                            <Button variant='secondary' onClick={this.handleSubmit} >Add book</Button>
+                            <Button variant='secondary' onClick={this.handleSubmit} >
+                                {this.state.bookId ? 'Edit': 'Add book'}
+                            </Button>
                         </div>
                     </Form>
                 </div>
