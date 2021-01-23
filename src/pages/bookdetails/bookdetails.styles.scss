@@ -56,3 +56,15 @@
     justify-content: flex-end;
     margin-right: 50px;
 }
+
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 50px;
+    
+    .button {
+        width: 100px;
+        margin: 5px;
+    }
+}

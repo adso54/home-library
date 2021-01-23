@@ -186,6 +186,27 @@ class BookDetails extends React.Component  {
         })
     }
 
+    handleDelete = () => {
+        fetch(process.env.REACT_APP_SERV_ADRESS + '/book/userBook', {
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                userId: this.state.userId,
+                bookId: this.state.bookId
+            })
+        })
+        .then(res => res.json())
+        .then(numberOfDeletedRow => {
+            if(numberOfDeletedRow !==null) {
+                this.props.communicateHandler('Book successful deleted!', VARIANT.SUCCESS)
+            }else{
+                this.props.communicateHandler('An error occured!', VARIANT.DANGER)
+            }
+        })
+        .catch(err => console.log(err))
+        
+    }
+
     handleSubmit = () => {
         const formData = new FormData();
         formData.append('authors', JSON.stringify(this.state.authors));
@@ -299,12 +320,23 @@ class BookDetails extends React.Component  {
                                 }
 
                             />
-                        </Form.Group>
-                        <div className="addButton">
-                            <Button variant='secondary' onClick={this.handleSubmit} >
-                                {this.state.bookId ? 'Edit': 'Add book'}
-                            </Button>
-                        </div>
+                        </Form.Group>    
+                       
+                        {
+                            this.state.bookId ? 
+                                <div className="buttons">
+                                    <div >
+                                        <Button className="button" variant='secondary' onClick={this.handleEdit} >Edit</Button>
+                                    </div>
+                                    <div >
+                                        <Button className="button" variant='danger' onClick={this.handleDelete} >Delete</Button>
+                                    </div>
+                                </div>                            
+                            :
+                                <div className="addButton">
+                                    <Button  variant='secondary' onClick={this.handleSubmit} >Add book</Button>
+                                </div>
+                        }
                     </Form>
                 </div>
                 <div className="rightContainer">
