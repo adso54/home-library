@@ -20,7 +20,11 @@ class BookDetails extends React.Component  {
                     name: ''  
                 },
             ],
-            categories: [''],
+            categories: [ 
+                {   
+                    category: ''  
+                },
+            ],
             readDate: null, 
             description: '',
             comments: '',
@@ -34,7 +38,6 @@ class BookDetails extends React.Component  {
     componentDidMount = () => {
         bsCustomFileInput.init();
         const bookId = this.props.match.params.bookId;
-        console.log(this.props.match)
         this.setState((state) => 
            ({
             ...state,
@@ -53,9 +56,9 @@ class BookDetails extends React.Component  {
             })
             .then(res => res.json())
             .then(book => {
-                const category = book.category.map((category) => {
-                    return category.category
-                })
+                // const category = book.category.map((category) => {
+                //     return category.category
+                // })
                 let readDate = null
                 if(book.read_date!==null){
                     readDate = new Date(book.read_date);
@@ -67,7 +70,7 @@ class BookDetails extends React.Component  {
                     ...state,
                     title: book.title,
                     authors: book.author,
-                    categories: category,
+                    categories: book.category,
                     description: book.description,
                     comments: book.comments,
                     readDate: readDate,
@@ -93,9 +96,9 @@ class BookDetails extends React.Component  {
         this.setState(state => {
             const categories = state.categories.map((category, categoryIndex)=>{
                 if(categoryIndex===elementIndex){
-                    return value
+                    return {category: value}
                 }else{
-                    return category
+                    return {category: category.category}
                 }
             }
             )
@@ -109,8 +112,8 @@ class BookDetails extends React.Component  {
             const authors = state.authors.map((author, authorIndex)=>{
                 if(authorIndex===elementIndex){
                     return {
-                        name: value,
-                    }
+                            name: value,
+                        }
                 }else{
                     return {
                         name: author.name, 
@@ -128,9 +131,11 @@ class BookDetails extends React.Component  {
 
     addAuthorHandler = (e) =>{
         this.setState(state => {
-            const authors = state.authors.concat({ 
-                name: '', 
-            })
+            const authors = state.authors.concat(
+                { 
+                    name: '', 
+                }
+            )
 
             return {authors: authors};
         })
@@ -138,7 +143,11 @@ class BookDetails extends React.Component  {
 
     addCategoryHandler = (e) =>{
         this.setState(state => {
-            const categories = state.categories.concat('')
+            const categories = state.categories.concat(
+                {
+                    category: '',
+                }
+            )
             return {categories: categories};
         })
     };
@@ -162,7 +171,11 @@ class BookDetails extends React.Component  {
     deleteCategoryHandler = (deleteIndex, event) => {
         this.setState(state => {
             if(state.categories.length === 1){
-                return {categories:['']
+                return {categories:[
+                    {
+                        category: '',
+                    }
+                ]
             }
             }else{
                 const categories = state.categories.filter((category, index) => deleteIndex !== index)
@@ -213,13 +226,12 @@ class BookDetails extends React.Component  {
         formData.append('categories', JSON.stringify(this.state.categories));
         formData.append('description', this.state.description);
         formData.append('title', this.state.title);
+        formData.append('bookId', this.state.bookId);
         formData.append('comments', this.state.comments);
         formData.append('readDate', this.state.readDate);
         formData.append('userId', this.state.userId);
 
-        uploadImage(this.state.file)
-        .then(imageUrl => formData.append('imageUrl', imageUrl))
-        .then(() => {
+        const submitData = () => {
             fetch(process.env.REACT_APP_SERV_ADRESS + '/book',{
                 method: 'POST',
                 body: formData
@@ -233,7 +245,19 @@ class BookDetails extends React.Component  {
                 }
             })
             .catch(err => console.log(err))
-        })       
+        }
+
+        if(this.state.file !== null){
+            uploadImage(this.state.file)
+            .then(imageUrl => formData.append('imageUrl', imageUrl))
+            .then(() => {
+                submitData();
+            })       
+        }else{
+            formData.append('imageUrl', this.state.fileUrl);
+            submitData();
+        }
+
     }
 
     render(){
@@ -279,7 +303,7 @@ class BookDetails extends React.Component  {
                                         id={`name ${index}`}
                                         type="text" 
                                         placeholder="Category" 
-                                        value={category} 
+                                        value={category.category} 
                                         onChange={(event) => this.handleCategory(index,event)}
                                     />
                                     <div 
@@ -326,7 +350,7 @@ class BookDetails extends React.Component  {
                             this.state.bookId ? 
                                 <div className="buttons">
                                     <div >
-                                        <Button className="button" variant='secondary' onClick={this.handleEdit} >Edit</Button>
+                                        <Button className="button" variant='secondary' onClick={this.handleSubmit} >Edit</Button>
                                     </div>
                                     <div >
                                         <Button className="button" variant='danger' onClick={this.handleDelete} >Delete</Button>
