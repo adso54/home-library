@@ -1,6 +1,7 @@
 .navbar-link {
     color:rgba(255,255,255,.5);
     margin: 10px;
+    width: 100px;
 }
 
 .navbar-link:hover {
@@ -9,3 +10,19 @@
 
 }
 
+.searchIcon {
+    height: 38px;
+    background-color: #303337;
+    color: #fff;
+}
+
+.searchPanel {
+    align-items: center;
+    margin: 0 !important;
+    width: 500px;
+}
+
+.searchField {
+    background-color: #303337;
+    
+}
