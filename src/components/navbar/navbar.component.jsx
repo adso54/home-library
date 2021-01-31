@@ -5,8 +5,7 @@ import React from 'react';
 
 import './navbar.styles.scss'
 
-const NavbarKD = ({signOut, user}) => {
-
+const NavbarKD = ({signOut, user, searchFieldHandler}) => {
     return(
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Navbar.Brand href="/">My Library</Navbar.Brand>
@@ -24,7 +23,7 @@ const NavbarKD = ({signOut, user}) => {
                     <FormControl
                             className='searchField'
                             placeholder="Search by title, author or category"
-                            
+                            onChange={searchFieldHandler}
                         />
                 </InputGroup>
 

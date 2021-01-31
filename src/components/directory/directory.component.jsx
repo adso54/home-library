@@ -8,9 +8,11 @@ class Directory extends React.Component {
         this.state = 
         {
             books: [],
+            filteredBooks: [],
             user: {
                 id: null
             },
+            searchField: ''
         }
 
     }
@@ -18,7 +20,8 @@ class Directory extends React.Component {
     componentDidMount = () => {
         this.setState(state => ({
             ...state,
-            user: this.props.user
+            user: this.props.user,
+            searchField: this.props.searchField,
         }))
 
         fetch(process.env.REACT_APP_SERV_ADRESS + '/book/allUserBooks',{
@@ -44,11 +47,39 @@ class Directory extends React.Component {
             })
             .catch(err => console.log(err))
     }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        if (this.props.searchField !== prevProps.searchField) {
+            this.setState((state) => ({
+                ...state,
+                searchField: this.props.searchField
+            }))
+        }
+    }
+
     render() {
+        const filteredBooks = this.state.books.filter((book)=>{
+            let authorFits = false;
+            let categoryFits = false;
+            let titleFits = false;
+
+            titleFits = book.title.toLowerCase().includes(this.state.searchField);
+
+            book.author.forEach((author) => (
+                author.name.toLowerCase().includes(this.state.searchField) ? authorFits = true : null
+            ))
+
+            book.category.forEach((category) => (
+                category.category.toLowerCase().includes(this.state.searchField) ? categoryFits = true : null
+            ))
+
+            return titleFits || authorFits || categoryFits
+        })
+
         return(
             <div className = "directory">
-                {(this.state.books.length > 0 )? 
-                    this.state.books.map((book) =>(
+                {(filteredBooks.length > 0 )? 
+                    filteredBooks.map((book) =>(
                         <CardKD key={book.id} book={book} />
                     ))
                     :

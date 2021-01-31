@@ -27,7 +27,8 @@ class App extends React.Component {
       message: {
         text: null,
         variant: null
-      }
+      },
+      searchField: '',
     }
   }
 
@@ -103,38 +104,40 @@ class App extends React.Component {
 
   userRegister = (firstName, lastName, email, password, confirmPassword) => {
     if(password === confirmPassword){
-        fetch(process.env.REACT_APP_SERV_ADRESS + '/user/register', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                password: password
-            })
-        })
-        .then( response => response.json())
-        .then(user => {
-            if(user.id){
-                this.userUpdate(user);
-                this.communicateHandler("Registration successed!", VARIANT.SUCCESS)
-                this.props.history.push("/");
-            }
-        })
-        .catch(err=>console.error(err))
+      fetch(process.env.REACT_APP_SERV_ADRESS + '/user/register', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+              firstName: firstName,
+              lastName: lastName,
+              email: email,
+              password: password
+          })
+      })
+      .then( response => response.json())
+      .then(user => {
+          if(user.id){
+              this.userUpdate(user);
+              this.communicateHandler("Registration successed!", VARIANT.SUCCESS)
+              this.props.history.push("/");
+          }
+      })
+      .catch(err=>console.error(err))
     }else{
       this.communicateHandler("Passwords don't match!", VARIANT.DANGER)
     }  
-}
-
-componentDidMount(){
-  let user = JSON.parse(window.localStorage.getItem('user'))
-  if(user){
-    this.userUpdate(user)
   }
-}
 
+  componentDidMount(){
+    let user = JSON.parse(window.localStorage.getItem('user'))
+    if(user){
+      this.userUpdate(user)
+    }
+  }
 
+  searchFieldHandler = (event) =>{
+    this.setState({searchField: event.target.value})
+  }
 
   render(){
     return (
@@ -142,6 +145,7 @@ componentDidMount(){
           <NavbarKD 
             signOut={this.signOut}
             user={this.state.user}
+            searchFieldHandler = {this.searchFieldHandler}
           />
           {this.state.message.text ? 
               <Message 
@@ -155,7 +159,7 @@ componentDidMount(){
             <Switch>
               <Route exact path="/" 
                 render={() => (
-                  <HomePage user={this.state.user} />
+                  <HomePage user={this.state.user} searchField={this.state.searchField} />
                 )}
                />
               <Route path="/bookdetails/:bookId" 
