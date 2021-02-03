@@ -18,6 +18,7 @@ class Directory extends React.Component {
     }
 
     componentDidMount = () => {
+       
         this.setState(state => ({
             ...state,
             user: this.props.user,

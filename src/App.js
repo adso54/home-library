@@ -1,6 +1,7 @@
 //Libraries
 import React from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom'
+import { connect } from 'react-redux';
 //Styles
 import './App.css';
 //Pages:
@@ -13,51 +14,49 @@ import NavbarKD from './components/navbar/navbar.component';
 import Message from './components/message/message.component';
 //Utilities
 import VARIANT from './assets/communicate-variants.js';
+//redux
+import { setCurrentUser } from './redux/user/user.actions';
 
 class App extends React.Component {
   constructor(props){
-    super(props)
+    super();
     this.state = {
-      user: {
-        id: null,
-        email: null,
-        firstName: null,
-        lastName: null
-      },
+      // user: {
+      //   id: null,
+      //   email: null,
+      //   firstName: null,
+      //   lastName: null
+      // },
       message: {
         text: null,
         variant: null
       },
-      searchField: '',
+      searchField: ''
     }
   }
 
   userUpdate = (user) => {
-      this.setState(state => {
-        window.localStorage.setItem('user', JSON.stringify(user))
-        return(
-          { ...state,  
-            user: {
-              id: user.id,
-              email: user.email,
-              firstName: user.first_name,
-              lastName: user.last_name
-            }}
-        )
-    })  
+    window.localStorage.setItem('user', JSON.stringify(user))
+    this.props.setCurrentUser(
+      { 
+          id: user.id,
+          email: user.email,
+          firstName: user.first_name,
+          lastName: user.last_name
+      }
+    ) 
   }
 
   signOut = () => {
     window.localStorage.setItem('user', null)
-    this.setState(state =>({
-      ...state,
-      user: {
-        id: null,
-        email: null,
-        firstName: null,
-        lastName: null
+    this.props.setCurrentUser(
+      {
+          id: null,
+          email: null,
+          firstName: null,
+          lastName: null
       }
-    }))
+    )
   }
 
   communicateHandler = (text, variant) =>{ 
@@ -139,13 +138,15 @@ class App extends React.Component {
     this.setState({searchField: event.target.value})
   }
 
+
   render(){
+   
     return (
       <div className="app">
           <NavbarKD 
             signOut={this.signOut}
-            user={this.state.user}
-            searchFieldHandler = {this.searchFieldHandler}
+            // user={this.state.user}
+            searchFieldHandler={this.searchFieldHandler}
           />
           {this.state.message.text ? 
               <Message 
@@ -155,21 +156,27 @@ class App extends React.Component {
             : 
             null
           }
-          {this.state.user.id ?
+          {this.props.user.id ?
             <Switch>
               <Route exact path="/" 
                 render={() => (
-                  <HomePage user={this.state.user} searchField={this.state.searchField} />
+                  <HomePage 
+                    // user={this.state.user} 
+                    searchField={this.state.searchField} />
                 )}
                />
               <Route path="/bookdetails/:bookId" 
                 render={() => (
-                  <BookDetails user={this.state.user} communicateHandler={(text, variant) => this.communicateHandler(text, variant)}/>
+                  <BookDetails 
+                    // user={this.state.user} 
+                    communicateHandler={(text, variant) => this.communicateHandler(text, variant)}/>
                 )}
               />
               <Route path="/bookdetails" 
                 render={() => (
-                  <BookDetails user={this.state.user} communicateHandler={(text, variant) => this.communicateHandler(text, variant)}/>
+                  <BookDetails 
+                    // user={this.state.user} 
+                    communicateHandler={(text, variant) => this.communicateHandler(text, variant)}/>
                 )}
               />
               <Route path="/register"  
@@ -210,4 +217,12 @@ class App extends React.Component {
   }
 }
 
-export default withRouter(App);
+const mapStateToProps = state => ({
+  user: state.user.user
+})
+
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));

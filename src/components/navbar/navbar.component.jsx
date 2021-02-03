@@ -2,6 +2,7 @@ import {Navbar, Nav, InputGroup, FormControl} from 'react-bootstrap'; //NavDropd
 import {Link} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
+import { connect } from 'react-redux';
 
 import './navbar.styles.scss'
 
@@ -26,6 +27,7 @@ const NavbarKD = ({signOut, user, searchFieldHandler}) => {
                             onChange={searchFieldHandler}
                         />
                 </InputGroup>
+               
 
                 </Nav>
             <Nav >
@@ -48,5 +50,8 @@ const NavbarKD = ({signOut, user, searchFieldHandler}) => {
         </Navbar>
 )}
 
+const mapStateToProps = state => ({
+    user: state.user.user
+})
 
-export default NavbarKD;
+export default connect(mapStateToProps)(NavbarKD);

@@ -6,7 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import bsCustomFileInput from 'bs-custom-file-input';
 import VARIANT from '../../assets/communicate-variants.js';
 import { uploadImage } from '../../firebase/firebaseUtils.js';
-
+import { connect } from 'react-redux';
 
 import './bookdetails.styles.scss';
 
@@ -377,4 +377,8 @@ class BookDetails extends React.Component  {
         )}
     };
 
-export default withRouter(BookDetails);
+const mapStateToProps = (state) => ({
+    user: state.user.user
+})
+
+export default connect(mapStateToProps)(withRouter(BookDetails));
