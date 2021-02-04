@@ -1,6 +1,6 @@
 //Libraries
 import React from 'react';
-import { Switch, Route, withRouter } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import { connect } from 'react-redux';
 //Styles
 import './App.css';
@@ -16,22 +16,16 @@ import Message from './components/message/message.component';
 import VARIANT from './assets/communicate-variants.js';
 //redux
 import { setCurrentUser } from './redux/user/user.actions';
+import { setSearchField } from './redux/search/search.actions';
 
 class App extends React.Component {
   constructor(props){
     super();
     this.state = {
-      // user: {
-      //   id: null,
-      //   email: null,
-      //   firstName: null,
-      //   lastName: null
-      // },
       message: {
         text: null,
         variant: null
-      },
-      searchField: ''
+      }
     }
   }
 
@@ -135,7 +129,7 @@ class App extends React.Component {
   }
 
   searchFieldHandler = (event) =>{
-    this.setState({searchField: event.target.value})
+    this.props.setSearchField(event.target.value)
   }
 
 
@@ -145,7 +139,6 @@ class App extends React.Component {
       <div className="app">
           <NavbarKD 
             signOut={this.signOut}
-            // user={this.state.user}
             searchFieldHandler={this.searchFieldHandler}
           />
           {this.state.message.text ? 
@@ -161,21 +154,18 @@ class App extends React.Component {
               <Route exact path="/" 
                 render={() => (
                   <HomePage 
-                    // user={this.state.user} 
-                    searchField={this.state.searchField} />
+                    searchField={this.props.searchField} />
                 )}
                />
               <Route path="/bookdetails/:bookId" 
                 render={() => (
                   <BookDetails 
-                    // user={this.state.user} 
                     communicateHandler={(text, variant) => this.communicateHandler(text, variant)}/>
                 )}
               />
               <Route path="/bookdetails" 
                 render={() => (
                   <BookDetails 
-                    // user={this.state.user} 
                     communicateHandler={(text, variant) => this.communicateHandler(text, variant)}/>
                 )}
               />
@@ -199,10 +189,11 @@ class App extends React.Component {
                 )}
               />
               <Route path="/login" 
-                render={() => (
-                  <LogIn 
-                    userSignIn={this.userSignIn}
-                  />)}
+                render={() => 
+                    (<LogIn 
+                      userSignIn={this.userSignIn}
+                    />)
+                }
               />
                <Route  path="/" 
                 render={() => (
@@ -218,11 +209,13 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user.user
+  user: state.user.user,
+  searchField: state.search.searchField
 })
 
 const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
+  setCurrentUser: user => dispatch(setCurrentUser(user)),
+  setSearchField: searchField => dispatch(setSearchField(searchField)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));
+export default connect(mapStateToProps, mapDispatchToProps)(App);

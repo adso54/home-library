@@ -3,10 +3,12 @@ import {Link} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import { connect } from 'react-redux';
+import {setSearchField} from '../../redux/search/search.actions'
 
 import './navbar.styles.scss'
 
-const NavbarKD = ({signOut, user, searchFieldHandler}) => {
+const NavbarKD = ({signOut, user, setSearchField}) => {
+    
     return(
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Navbar.Brand href="/">My Library</Navbar.Brand>
@@ -24,10 +26,9 @@ const NavbarKD = ({signOut, user, searchFieldHandler}) => {
                     <FormControl
                             className='searchField'
                             placeholder="Search by title, author or category"
-                            onChange={searchFieldHandler}
+                            onChange={(e) => setSearchField(e.target.value)}
                         />
                 </InputGroup>
-               
 
                 </Nav>
             <Nav >
@@ -51,7 +52,12 @@ const NavbarKD = ({signOut, user, searchFieldHandler}) => {
 )}
 
 const mapStateToProps = state => ({
-    user: state.user.user
+    user: state.user.user,
+    searchField: state.search.searchField
 })
 
-export default connect(mapStateToProps)(NavbarKD);
+const mapDispatchToProps = dispatch =>({
+    setSearchField: searchField => dispatch(setSearchField(searchField)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavbarKD);
