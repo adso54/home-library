@@ -1,17 +1,22 @@
 import React from 'react';
 import Alert from 'react-bootstrap/Alert'
+import {connect} from 'react-redux'
 
 import './message.styles.scss';
 
 
-const Message = ({text, variant})=> {
+const Message = ({message})=> {
     return(
         <div >
-            <Alert className="message" variant={variant}>
-                {text}
+            <Alert className="message" variant={message.variant}>
+                {message.text}
             </Alert>
         </div>
     )
 }
 
-export default Message;
+const mapStateToProps = state => ({
+    message: state.message.message
+})
+
+export default connect(mapStateToProps)(Message);

@@ -17,6 +17,7 @@ import VARIANT from './assets/communicate-variants.js';
 //redux
 import { setCurrentUser } from './redux/user/user.actions';
 import { setSearchField } from './redux/search/search.actions';
+import { setMessage} from './redux/message/message.actions';
 
 class App extends React.Component {
   constructor(props){
@@ -54,21 +55,17 @@ class App extends React.Component {
   }
 
   communicateHandler = (text, variant) =>{ 
-    this.setState(state => ({ 
-      ...state,
-      message: {
+    this.props.setMessage({
         text: text,
         variant: variant
       }
-    }))
+    )
     setTimeout(()=> {
-      this.setState(state => ({ 
-        ...state,
-        message: {
-          text: null,
-          variant: null
-        }
-      }))
+      this.props.setMessage({
+        text: null,
+        variant: null
+      }
+    )
     }, 3000) 
   }
   
@@ -141,11 +138,8 @@ class App extends React.Component {
             signOut={this.signOut}
             searchFieldHandler={this.searchFieldHandler}
           />
-          {this.state.message.text ? 
-              <Message 
-                text={this.state.message.text} 
-                variant={this.state.message.variant}
-              />
+          {this.props.message.text ? 
+              <Message />
             : 
             null
           }
@@ -153,8 +147,7 @@ class App extends React.Component {
             <Switch>
               <Route exact path="/" 
                 render={() => (
-                  <HomePage 
-                    searchField={this.props.searchField} />
+                  <HomePage />
                 )}
                />
               <Route path="/bookdetails/:bookId" 
@@ -210,12 +203,14 @@ class App extends React.Component {
 
 const mapStateToProps = state => ({
   user: state.user.user,
-  searchField: state.search.searchField
+  searchField: state.search.searchField,
+  message: state.message.message
 })
 
 const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user)),
   setSearchField: searchField => dispatch(setSearchField(searchField)),
+  setMessage: message => dispatch(setMessage(message)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
