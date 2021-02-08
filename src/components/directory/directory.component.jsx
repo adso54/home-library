@@ -2,6 +2,7 @@ import React from 'react';
 import CardKD from '../card/card.component';
 import './directory.styles.scss'
 import { connect } from 'react-redux'
+import {setSearchFieldHidden, setSearchFieldVisable} from '../../redux/search/search.actions'
 
 class Directory extends React.Component {
     constructor(props) {
@@ -14,7 +15,7 @@ class Directory extends React.Component {
     }
 
     componentDidMount = () => {
-
+        this.props.setSearchFieldVisable();
         fetch(process.env.REACT_APP_SERV_ADRESS + '/book/allUserBooks',{
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -37,6 +38,10 @@ class Directory extends React.Component {
                 }))
             })
             .catch(err => console.log(err))
+    }
+
+    componentWillUnmount = () => {
+        this.props.setSearchFieldHidden();
     }
 
     render() {
@@ -76,4 +81,10 @@ const mapStateToProps = (state) => ({
     searchField: state.search.searchField
 })
 
-export default connect(mapStateToProps)(Directory);
+const mapDispatchToProps = dispatch => ({
+    setSearchFieldHidden: () => dispatch(setSearchFieldHidden()),
+    setSearchFieldVisable: () => dispatch(setSearchFieldVisable()),
+})
+
+
+export default connect(mapStateToProps,mapDispatchToProps)(Directory);

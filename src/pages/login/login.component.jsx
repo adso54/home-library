@@ -44,7 +44,10 @@ class LogIn extends React.Component{
                             />
                         </Form.Group>
                         <div className="logInButton">
-                            <Button variant="success" className="but" onClick={()=> this.props.userSignIn(this.state.email, this.state.password)}>Sign In</Button>
+                            <Button 
+                                ariant="success" 
+                                className="but" 
+                                onClick={()=> this.props.userSignIn(this.state.email, this.state.password)}>Sign In</Button>
                         </div>
                    </Form>
                </div>

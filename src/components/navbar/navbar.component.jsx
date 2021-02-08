@@ -7,7 +7,7 @@ import {setSearchField} from '../../redux/search/search.actions'
 
 import './navbar.styles.scss'
 
-const NavbarKD = ({signOut, user, setSearchField}) => {
+const NavbarKD = ({signOut, user, setSearchField, searchVisable}) => {
     
     return(
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -18,17 +18,19 @@ const NavbarKD = ({signOut, user, setSearchField}) => {
                 <Link to='/bookdetails' className="navbar-link" >
                                 Add book
                             </Link> 
-                
-                <InputGroup className="mb-3 searchPanel">
-                    <InputGroup.Prepend>
-                        <InputGroup.Text className='searchIcon'><i className="fas fa-search"></i></InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                            className='searchField'
-                            placeholder="Search by title, author or category"
-                            onChange={(e) => setSearchField(e.target.value)}
-                        />
-                </InputGroup>
+                {searchVisable ? 
+                    <InputGroup className="mb-3 searchPanel">
+                        <InputGroup.Prepend>
+                            <InputGroup.Text className='searchIcon'><i className="fas fa-search"></i></InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <FormControl
+                                className='searchField'
+                                placeholder="Search by title, author or category"
+                                onChange={(e) => setSearchField(e.target.value)}
+                            />
+                    </InputGroup>
+                : null }
+               
 
                 </Nav>
             <Nav >
@@ -53,7 +55,8 @@ const NavbarKD = ({signOut, user, setSearchField}) => {
 
 const mapStateToProps = state => ({
     user: state.user.user,
-    searchField: state.search.searchField
+    searchField: state.search.searchField,
+    searchVisable: state.searchVisable.searchVisable
 })
 
 const mapDispatchToProps = dispatch =>({

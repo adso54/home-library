@@ -56,9 +56,6 @@ class BookDetails extends React.Component  {
             })
             .then(res => res.json())
             .then(book => {
-                // const category = book.category.map((category) => {
-                //     return category.category
-                // })
                 let readDate = null
                 if(book.read_date!==null){
                     readDate = new Date(book.read_date);

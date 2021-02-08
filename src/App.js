@@ -20,15 +20,6 @@ import { setSearchField } from './redux/search/search.actions';
 import { setMessage} from './redux/message/message.actions';
 
 class App extends React.Component {
-  constructor(props){
-    super();
-    this.state = {
-      message: {
-        text: null,
-        variant: null
-      }
-    }
-  }
 
   userUpdate = (user) => {
     window.localStorage.setItem('user', JSON.stringify(user))
@@ -138,11 +129,7 @@ class App extends React.Component {
             signOut={this.signOut}
             searchFieldHandler={this.searchFieldHandler}
           />
-          {this.props.message.text ? 
-              <Message />
-            : 
-            null
-          }
+          {this.props.message.text ? <Message /> : null}
           {this.props.user.id ?
             <Switch>
               <Route exact path="/" 
@@ -175,26 +162,26 @@ class App extends React.Component {
               />
             </Switch>
           :
-          <Switch>
-            <Route path="/register"  
+            <Switch>
+              <Route path="/register"  
                 render={() => (
                   <Register userRegister={this.userRegister} />
                 )}
               />
               <Route path="/login" 
-                render={() => 
-                    (<LogIn 
-                      userSignIn={this.userSignIn}
-                    />)
+                render={() => (
+                  <LogIn 
+                    userSignIn={this.userSignIn}
+                  />)
                 }
               />
-               <Route  path="/" 
+              <Route path="/" 
                 render={() => (
                   <LogIn 
                     userSignIn={this.userSignIn}
                   />)}
-               />
-          </Switch>
+              />
+            </Switch>
           }
       </div>
     );
