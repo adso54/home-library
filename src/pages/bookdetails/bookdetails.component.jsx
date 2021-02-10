@@ -7,6 +7,7 @@ import bsCustomFileInput from 'bs-custom-file-input';
 import VARIANT from '../../assets/communicate-variants.js';
 import { uploadImage } from '../../firebase/firebaseUtils.js';
 import { connect } from 'react-redux';
+import Dictionary from '../../components/dictionary/dictionary.component';
 
 import './bookdetails.styles.scss';
 
@@ -31,7 +32,8 @@ class BookDetails extends React.Component  {
             fileUrl: null,
             file: null,
             userId: null,
-            bookId: null     
+            bookId: null,
+            booksByTitle: null
         }
     }
 
@@ -194,6 +196,25 @@ class BookDetails extends React.Component  {
         this.setState({
             [name]: value
         })
+
+        if(name==='title' && value.length >0){
+            fetch(process.env.REACT_APP_SERV_ADRESS + '/book/getTop10ByTitlePart',{
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    title: value
+                })
+            })
+            .then(res => res.json())
+            .then(books => {
+                console.log(books)
+                this.setState((state) => 
+                ({
+                    ...state,
+                    booksByTitle: books
+                }))
+            })
+        }
     }
 
     handleDelete = () => {
@@ -264,7 +285,16 @@ class BookDetails extends React.Component  {
                     <Form >
                         <Form.Group as={Col} controlId="formGridTitle" >
                             <Form.Label className='label' >Title</Form.Label>
-                            <Form.Control type="text" placeholder="Enter title" value={this.state.title} onChange={this.handleChange} name="title" />
+                            <Form.Control 
+                                type="text" 
+                                placeholder="Enter title" 
+                                value={this.state.title} 
+                                onChange={this.handleChange} 
+                                name="title" 
+                            />
+                            {this.state.booksByTitle !== null && this.state.booksByTitle.length > 0 ? <Dictionary items={this.state.booksByTitle} /> : null}
+                            
+                            
                         </Form.Group>
                         <Form.Group as={Col} >
                             <Form.Label className='label' >Authors</Form.Label>
