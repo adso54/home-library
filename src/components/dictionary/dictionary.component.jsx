@@ -4,9 +4,9 @@ import Item from './item/item.component';
 
 const Dictionary = ({items}) =>{
     return(
-        <div>
+        <div className="dictionary">
             {items.map((item) => (
-                <div key={item.id} >
+                <div key={item.id}  >
                     <Item item={item}/>
                 </div>
             ))}

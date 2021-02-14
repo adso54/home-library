@@ -33,7 +33,8 @@ class BookDetails extends React.Component  {
             file: null,
             userId: null,
             bookId: null,
-            booksByTitle: null
+            booksByTitle: null,
+            focus: null,
         }
     }
 
@@ -191,29 +192,32 @@ class BookDetails extends React.Component  {
               })        
     }
 
+    fetchTop10ByTitle = (titlePart) => (
+        fetch(process.env.REACT_APP_SERV_ADRESS + '/book/getTop10ByTitlePart',{
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                title: titlePart
+            })
+        })
+        .then(res => res.json())
+        .then(books => {
+            this.setState((state) => 
+            ({
+                ...state,
+                booksByTitle: books
+            }))
+        })
+    )  
+
     handleChange = (e) => {
         const { name, value} = e.target
         this.setState({
             [name]: value
         })
 
-        if(name==='title' && value.length >0){
-            fetch(process.env.REACT_APP_SERV_ADRESS + '/book/getTop10ByTitlePart',{
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    title: value
-                })
-            })
-            .then(res => res.json())
-            .then(books => {
-                console.log(books)
-                this.setState((state) => 
-                ({
-                    ...state,
-                    booksByTitle: books
-                }))
-            })
+        if(name==='title' ){
+            this.fetchTop10ByTitle(value)
         }
     }
 
@@ -278,6 +282,20 @@ class BookDetails extends React.Component  {
 
     }
 
+    onFieldFocus = (e) => {
+        const name = e.target.name
+        this.fetchTop10ByTitle('')
+        this.setState(() => ({
+            focus: name
+        }))
+    }
+
+    onFieldBlur = () => {
+        this.setState(() => ({
+            focus: null
+        }))
+    }
+
     render(){
         return(
             <div className="bookdetails">
@@ -291,10 +309,15 @@ class BookDetails extends React.Component  {
                                 value={this.state.title} 
                                 onChange={this.handleChange} 
                                 name="title" 
+                                onFocus={(e)=> this.onFieldFocus(e)}
+                                onBlur = {this.onFieldBlur}
                             />
-                            {this.state.booksByTitle !== null && this.state.booksByTitle.length > 0 ? <Dictionary items={this.state.booksByTitle} /> : null}
-                            
-                            
+                            {this.state.booksByTitle !== null 
+                                && this.state.booksByTitle.length > 0 
+                                && this.state.focus === 'title'
+                            ? <Dictionary items={this.state.booksByTitle}  /> 
+                            : null}
+                                                  
                         </Form.Group>
                         <Form.Group as={Col} >
                             <Form.Label className='label' >Authors</Form.Label>
