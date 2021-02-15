@@ -291,9 +291,11 @@ class BookDetails extends React.Component  {
     }
 
     onFieldBlur = () => {
-        this.setState(() => ({
-            focus: null
-        }))
+        setTimeout(()=>{
+            this.setState(() => ({
+                focus: null
+            }))
+        },200) 
     }
 
     render(){
