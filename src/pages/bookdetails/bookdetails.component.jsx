@@ -31,7 +31,6 @@ class BookDetails extends React.Component  {
             comments: '',
             fileUrl: null,
             file: null,
-            userId: null,
             bookId: null,
             booksByTitle: null,
             focus: null,
@@ -44,7 +43,6 @@ class BookDetails extends React.Component  {
         this.setState((state) => 
            ({
             ...state,
-            userId: this.props.user.id,
             bookId: bookId,
         }))
         
@@ -226,7 +224,7 @@ class BookDetails extends React.Component  {
             method: 'DELETE',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                userId: this.state.userId,
+                userId: this.props.user.id,
                 bookId: this.state.bookId
             })
         })
@@ -251,7 +249,7 @@ class BookDetails extends React.Component  {
         formData.append('bookId', this.state.bookId);
         formData.append('comments', this.state.comments);
         formData.append('readDate', this.state.readDate);
-        formData.append('userId', this.state.userId);
+        formData.append('userId', this.props.user.id);
 
         const submitData = () => {
             fetch(process.env.REACT_APP_SERV_ADRESS + '/book',{
