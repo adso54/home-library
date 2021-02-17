@@ -1,14 +1,9 @@
 import React from 'react';
 import './item.styles.scss';
 
-const selectItem = (id, title) => {
-    console.log(id)
-    console.log(title)
-}
-
-const Item = ({item}) =>{
+const Item = ({item, titleSelected}) =>{
     return (
-        <div className="dictionaryItem" onClick={() => selectItem(item.id, item.title)}>
+        <div className="dictionaryItem" onClick={() => titleSelected(item.id)}>
             {item.title}
         </div>
     )

@@ -37,6 +37,41 @@ class BookDetails extends React.Component  {
         }
     }
 
+    fetchBookById = (bookId) => {
+        console.log(this.props.user.id)
+        fetch(process.env.REACT_APP_SERV_ADRESS + '/book/details',{
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                userId: this.props.user.id,
+                bookId: bookId,
+            })
+        })
+        .then(res => res.json())
+        .then(book => {
+            console.log(book)
+            let readDate = null
+            if(book.read_date!==null){
+                readDate = new Date(book.read_date);
+            }else{
+                readDate = null;
+            }
+
+            this.setState(state =>({
+                ...state,
+                title: book.title,
+                authors: book.author,
+                categories: book.category,
+                description: (book.description ? book.description : ''),
+                comments: (book.comments ? book.comments : ''),
+                readDate: readDate,
+                fileUrl: book.image_url,
+            }))
+        })
+        .catch(err => console.log(err))
+    }
+    
+
     componentDidMount = () => {
         bsCustomFileInput.init();
         const bookId = this.props.match.params.bookId;
@@ -47,35 +82,7 @@ class BookDetails extends React.Component  {
         }))
         
         if(bookId) {
-            fetch(process.env.REACT_APP_SERV_ADRESS + '/book/details',{
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    userId: this.props.user.id,
-                    bookId: bookId,
-                })
-            })
-            .then(res => res.json())
-            .then(book => {
-                let readDate = null
-                if(book.read_date!==null){
-                    readDate = new Date(book.read_date);
-                }else{
-                    readDate = null;
-                }
-
-                this.setState(state =>({
-                    ...state,
-                    title: book.title,
-                    authors: book.author,
-                    categories: book.category,
-                    description: book.description,
-                    comments: book.comments,
-                    readDate: readDate,
-                    fileUrl: book.image_url,
-                }))
-            })
-            .catch(err => console.log(err))
+            this.fetchBookById(bookId)
         }
     }
 
@@ -296,6 +303,13 @@ class BookDetails extends React.Component  {
         },200) 
     }
 
+    titleSelected = (id) => {
+        if(id){
+            console.log(id)
+            this.fetchBookById(id) 
+        }   
+    }
+
     render(){
         return(
             <div className="bookdetails">
@@ -315,7 +329,7 @@ class BookDetails extends React.Component  {
                             {this.state.booksByTitle !== null 
                                 && this.state.booksByTitle.length > 0 
                                 && this.state.focus === 'title'
-                            ? <Dictionary items={this.state.booksByTitle}  /> 
+                            ? <Dictionary items={this.state.booksByTitle} titleSelected={this.titleSelected} /> 
                             : null}
                                                   
                         </Form.Group>
