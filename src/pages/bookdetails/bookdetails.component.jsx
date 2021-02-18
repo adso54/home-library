@@ -34,11 +34,11 @@ class BookDetails extends React.Component  {
             bookId: null,
             booksByTitle: null,
             focus: null,
+            userHasBook: false
         }
     }
 
     fetchBookById = (bookId) => {
-        console.log(this.props.user.id)
         fetch(process.env.REACT_APP_SERV_ADRESS + '/book/details',{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -66,6 +66,8 @@ class BookDetails extends React.Component  {
                 comments: (book.comments ? book.comments : ''),
                 readDate: readDate,
                 fileUrl: book.image_url,
+                bookId: book.id,
+                userHasBook: (book.user_id ? true : false),
             }))
         })
         .catch(err => console.log(err))
@@ -75,26 +77,12 @@ class BookDetails extends React.Component  {
     componentDidMount = () => {
         bsCustomFileInput.init();
         const bookId = this.props.match.params.bookId;
-        this.setState((state) => 
-           ({
-            ...state,
-            bookId: bookId,
-        }))
         
         if(bookId) {
             this.fetchBookById(bookId)
         }
     }
 
-    componentDidUpdate(){
-        if(this.state.bookId && !this.props.match.params.bookId){ 
-            this.setState((state) => 
-            ({
-            ...state,
-            bookId: this.props.match.params.bookId,
-            }))
-        }
-      }
 
     handleCategory = (elementIndex, event) =>{
         const value = event.target.value
@@ -411,7 +399,7 @@ class BookDetails extends React.Component  {
                         </Form.Group>    
                        
                         {
-                            this.state.bookId ? 
+                            this.state.userHasBook ? 
                                 <div className="buttons">
                                     <div >
                                         <Button className="button" variant='secondary' onClick={this.handleSubmit} >Edit</Button>
