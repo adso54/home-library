@@ -2,12 +2,12 @@ import React from 'react';
 import './dictionary.styles.scss';
 import Item from './item/item.component';
 
-const Dictionary = ({items, titleSelected}) =>{
+const Dictionary = ({dictionaryValues, dictionarySelected}) =>{
     return(
         <div className="dictionary">
-            {items.map((item) => (
-                <div key={item.id}  >
-                    <Item item={item} titleSelected={titleSelected}/>
+            {dictionaryValues.map((item) => (
+                <div key={item.dictionaryId}  >
+                    <Item item={item} dictionarySelected={dictionarySelected}/>
                 </div>
             ))}
             

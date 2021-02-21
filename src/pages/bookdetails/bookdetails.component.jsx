@@ -32,7 +32,8 @@ class BookDetails extends React.Component  {
             fileUrl: null,
             file: null,
             bookId: null,
-            booksByTitle: null,
+            titleDictionaryValues: null,
+            authorDictionaryValues: null,
             focus: null,
             userHasBook: false
         }
@@ -77,10 +78,12 @@ class BookDetails extends React.Component  {
     componentDidMount = () => {
         bsCustomFileInput.init();
         const bookId = this.props.match.params.bookId;
-        
         if(bookId) {
             this.fetchBookById(bookId)
         }
+
+        this.fetchTop10ByTitle('');
+        this.fetchTop10ByAuthor('');
     }
 
 
@@ -99,8 +102,8 @@ class BookDetails extends React.Component  {
         })         
     }
 
-    handleNameChange = (elementIndex, event) =>{
-        const value = event.target.value
+    handleNameChange = (elementIndex, value) =>{
+        // const value = event.target.value
         this.setState(state => {
             const authors = state.authors.map((author, authorIndex)=>{
                 if(authorIndex===elementIndex){
@@ -195,10 +198,38 @@ class BookDetails extends React.Component  {
         })
         .then(res => res.json())
         .then(books => {
+            const titleDictionaryValues = books.map((book) => ({
+                    dictionaryId: book.id, 
+                    dictionaryValue: book.title
+                }
+            ))
             this.setState((state) => 
             ({
                 ...state,
-                booksByTitle: books
+                titleDictionaryValues: titleDictionaryValues
+            }))
+        })
+    )  
+
+    fetchTop10ByAuthor = (authorPart) => (
+        fetch(process.env.REACT_APP_SERV_ADRESS + '/author/getTop10ByName',{
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                name: authorPart
+            })
+        })
+        .then(res => res.json())
+        .then(authors => {
+            const authorDictionaryValues = authors.map((author) => ({
+                    dictionaryId: author.id, 
+                    dictionaryValue: author.name
+                }
+            ))
+            this.setState((state) => 
+            ({
+                ...state,
+                authorDictionaryValues: authorDictionaryValues
             }))
         })
     )  
@@ -277,7 +308,7 @@ class BookDetails extends React.Component  {
 
     onFieldFocus = (e) => {
         const name = e.target.name
-        this.fetchTop10ByTitle('')
+        
         this.setState(() => ({
             focus: name
         }))
@@ -291,11 +322,14 @@ class BookDetails extends React.Component  {
         },200) 
     }
 
-    titleSelected = (id) => {
-        if(id){
-            console.log(id)
-            this.fetchBookById(id) 
+    titleSelected = (item) => {
+        if(item.dictionaryId){
+            this.fetchBookById(item.dictionaryId) 
         }   
+    }
+
+    authorSelected = (item) => {
+        console.log(item.dictionaryValue) 
     }
 
     render(){
@@ -314,10 +348,10 @@ class BookDetails extends React.Component  {
                                 onFocus={(e)=> this.onFieldFocus(e)}
                                 onBlur = {this.onFieldBlur}
                             />
-                            {this.state.booksByTitle !== null 
-                                && this.state.booksByTitle.length > 0 
+                            {this.state.titleDictionaryValues !== null 
+                                && this.state.titleDictionaryValues.length > 0 
                                 && this.state.focus === 'title'
-                            ? <Dictionary items={this.state.booksByTitle} titleSelected={this.titleSelected} /> 
+                            ? <Dictionary dictionaryValues={this.state.titleDictionaryValues} dictionarySelected={this.titleSelected} /> 
                             : null}
                                                   
                         </Form.Group>
@@ -331,16 +365,21 @@ class BookDetails extends React.Component  {
                                         type="text" 
                                         placeholder="Name" 
                                         value={author.name} 
-                                        onChange={(event) => this.handleNameChange(index,event)}
+                                        name="author"
+                                        onChange={(event) => this.handleNameChange(index,event.target.value)}
+                                        onFocus={(e)=> this.onFieldFocus(e)}
+                                        onBlur = {this.onFieldBlur}
                                     />
-
-                                    <div className='deleteItem' onClick={(event) => this.deleteAuthorHandler(index, event)}>
+                                     <div className='deleteItem' onClick={(event) => this.deleteAuthorHandler(index, event)}>
                                         <i className="far fa-trash-alt"></i>   
-                                    </div>
+                                    </div>                                    
                                 </div>
-                                
                             ))}
-
+                            {this.state.authorDictionaryValues !== null 
+                                        && this.state.authorDictionaryValues.length > 0 
+                                        && this.state.focus === 'author'
+                                    ? <Dictionary dictionaryValues={this.state.authorDictionaryValues} dictionarySelected={this.authorSelected} /> 
+                                    : null}    
                             <div className='addNew' onClick={this.addAuthorHandler}>                     
                                 <i className="fas fa-plus"><span> NEW</span></i>
                             </div>
