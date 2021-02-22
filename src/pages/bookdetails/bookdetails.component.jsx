@@ -34,6 +34,7 @@ class BookDetails extends React.Component  {
             bookId: null,
             titleDictionaryValues: null,
             authorDictionaryValues: null,
+            categoryDictionaryValues: null,
             focus: null,
             userHasBook: false
         }
@@ -84,11 +85,11 @@ class BookDetails extends React.Component  {
 
         this.fetchTop10ByTitle('');
         this.fetchTop10ByAuthor('');
+        this.fetchTop10ByCategory('');
     }
 
 
-    handleCategory = (elementIndex, event) =>{
-        const value = event.target.value
+    handleCategory = (elementIndex, value) =>{
         this.setState(state => {
             const categories = state.categories.map((category, categoryIndex)=>{
                 if(categoryIndex===elementIndex){
@@ -234,6 +235,29 @@ class BookDetails extends React.Component  {
         })
     )  
 
+    fetchTop10ByCategory = (categoryPart) => (
+        fetch(process.env.REACT_APP_SERV_ADRESS + '/category/getTop10ByCategoryPart',{
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                category: categoryPart
+            })
+        })
+        .then(res => res.json())
+        .then(categories => {
+            const categoryDictionaryValues = categories.map((category) => ({
+                    dictionaryId: category.id, 
+                    dictionaryValue: category.category
+                }
+            ))
+            this.setState((state) => 
+            ({
+                ...state,
+                categoryDictionaryValues: categoryDictionaryValues
+            }))
+        })
+    )  
+
     handleChange = (e) => {
         const { name, value} = e.target
         this.setState({
@@ -328,8 +352,12 @@ class BookDetails extends React.Component  {
         }   
     }
 
-    authorSelected = (item) => {
-        console.log(item.dictionaryValue) 
+    authorSelected = (item, index) => {
+        this.handleNameChange(index, item.dictionaryValue)
+    }
+
+    categorySelected = (item, index) => {
+        this.handleCategory(index, item.dictionaryValue)
     }
 
     render(){
@@ -359,27 +387,29 @@ class BookDetails extends React.Component  {
                             <Form.Label className='label' >Authors</Form.Label>
 
                             {this.state.authors.map((author, index) =>(
-                                <div className="authors" key={index}>
-                                    <Form.Control 
-                                        id={`name ${index}`}
-                                        type="text" 
-                                        placeholder="Name" 
-                                        value={author.name} 
-                                        name="author"
-                                        onChange={(event) => this.handleNameChange(index,event.target.value)}
-                                        onFocus={(e)=> this.onFieldFocus(e)}
-                                        onBlur = {this.onFieldBlur}
-                                    />
-                                     <div className='deleteItem' onClick={(event) => this.deleteAuthorHandler(index, event)}>
-                                        <i className="far fa-trash-alt"></i>   
-                                    </div>                                    
+                                <div key={index}>
+                                    <div className="authors">
+                                        <Form.Control 
+                                            id={`name ${index}`}
+                                            type="text" 
+                                            placeholder="Name" 
+                                            value={author.name} 
+                                            name={`name ${index}`}
+                                            onChange={(event) => this.handleNameChange(index,event.target.value)}
+                                            onFocus={(e)=> this.onFieldFocus(e)}
+                                            onBlur = {this.onFieldBlur}
+                                        />
+                                        <div className='deleteItem' onClick={(event) => this.deleteAuthorHandler(index, event)}>
+                                            <i className="far fa-trash-alt"></i>   
+                                        </div>                                    
+                                    </div>
+                                    {this.state.authorDictionaryValues !== null 
+                                        && this.state.authorDictionaryValues.length > 0 
+                                        && this.state.focus === `name ${index}`
+                                    ? <Dictionary dictionaryValues={this.state.authorDictionaryValues} dictionarySelected={this.authorSelected} index = {index}/> 
+                                    : null}   
                                 </div>
                             ))}
-                            {this.state.authorDictionaryValues !== null 
-                                        && this.state.authorDictionaryValues.length > 0 
-                                        && this.state.focus === 'author'
-                                    ? <Dictionary dictionaryValues={this.state.authorDictionaryValues} dictionarySelected={this.authorSelected} /> 
-                                    : null}    
                             <div className='addNew' onClick={this.addAuthorHandler}>                     
                                 <i className="fas fa-plus"><span> NEW</span></i>
                             </div>
@@ -389,21 +419,31 @@ class BookDetails extends React.Component  {
                             <Form.Label className='label' >Categories</Form.Label>
 
                             {this.state.categories.map((category, index) =>(
-                                <div className="authors" key={index}>
-                                    <Form.Control 
-                                        id={`name ${index}`}
-                                        type="text" 
-                                        placeholder="Category" 
-                                        value={category.category} 
-                                        onChange={(event) => this.handleCategory(index,event)}
-                                    />
-                                    <div 
-                                        className='deleteItem' 
-                                        onClick={(event) => this.deleteCategoryHandler(index, event)}
-                                    >
-                                        <i className="far fa-trash-alt"></i>   
-                                    </div>
-                                </div>            
+                                <div key={index}>
+                                    <div className="authors" >
+                                        <Form.Control 
+                                            id={`category ${index}`}
+                                            type="text" 
+                                            placeholder="Category" 
+                                            value={category.category} 
+                                            onChange={(event) => this.handleCategory(index, event.target.value)}
+                                            name={`category ${index}`}
+                                            onFocus={(e)=> this.onFieldFocus(e)}
+                                            onBlur = {this.onFieldBlur}
+                                        />
+                                        <div 
+                                            className='deleteItem' 
+                                            onClick={(event) => this.deleteCategoryHandler(index, event)}
+                                        >
+                                            <i className="far fa-trash-alt"></i>   
+                                        </div>
+                                    </div>            
+                                    {this.state.categoryDictionaryValues !== null 
+                                        && this.state.categoryDictionaryValues.length > 0 
+                                        && this.state.focus === `category ${index}`
+                                    ? <Dictionary dictionaryValues={this.state.categoryDictionaryValues} dictionarySelected={this.categorySelected} index = {index}/> 
+                                    : null}  
+                                </div>
                             ))}
 
                             <div className='addNew' onClick={this.addCategoryHandler}>                     
