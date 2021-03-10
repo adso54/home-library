@@ -31,7 +31,7 @@ class LogIn extends React.Component{
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 email: email,
-                appLink: process.env.REACT_APP_SERV_ADRESS + '/user/changePassword/'
+                appLink: process.env.REACT_APP_FRONT_ADRESS + '/user/changePassword/'
             })
         })
     }

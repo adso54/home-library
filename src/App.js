@@ -9,6 +9,7 @@ import HomePage from './pages/homepage/homepage.component';
 import BookDetails from './pages/bookdetails/bookdetails.component';
 import Register from './pages/register/register.component';
 import LogIn from './pages/login/login.component';
+import ChangePassword from './pages/change-password/change-password.component';
 //Components
 import NavbarKD from './components/navbar/navbar.component';
 import Message from './components/message/message.component';
@@ -160,6 +161,12 @@ class App extends React.Component {
                     userSignIn={this.userSignIn}
                   />)}
               />
+              <Route path="/user/changePassword/:token" 
+                render={() => (
+                  <ChangePassword 
+                    
+                  />)}
+              />
             </Switch>
           :
             <Switch>
@@ -174,6 +181,12 @@ class App extends React.Component {
                     userSignIn={this.userSignIn}
                   />)
                 }
+              />
+              <Route path="/user/changePassword/:token" 
+                render={() => (
+                  <ChangePassword 
+                    
+                  />)}
               />
               <Route path="/" 
                 render={() => (
