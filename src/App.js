@@ -164,7 +164,7 @@ class App extends React.Component {
               <Route path="/user/changePassword/:token" 
                 render={() => (
                   <ChangePassword 
-                    
+                    communicateHandler={(text, variant) => this.communicateHandler(text, variant)}
                   />)}
               />
             </Switch>
@@ -185,7 +185,7 @@ class App extends React.Component {
               <Route path="/user/changePassword/:token" 
                 render={() => (
                   <ChangePassword 
-                    
+                    communicateHandler={(text, variant) => this.communicateHandler(text, variant)}
                   />)}
               />
               <Route path="/" 

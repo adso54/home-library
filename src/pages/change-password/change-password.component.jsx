@@ -2,6 +2,8 @@ import React from 'react';
 import {Form, Col, Button} from 'react-bootstrap'
 import {withRouter} from 'react-router-dom';
 import './change-password.styles.scss';
+import { connect } from 'react-redux';
+import VARIANT from '../../assets/communicate-variants.js';
 
 class ChangePassword extends React.Component{
     constructor(){
@@ -25,7 +27,30 @@ class ChangePassword extends React.Component{
         this.setState({[name]: value})
     }
 
-
+    changePassword = () => {
+        if(this.state.password === this.state.confirmPassword){
+            fetch(process.env.REACT_APP_SERV_ADRESS + '/user/changePassword',{
+                method: 'POST',
+                body: {
+                    password: this.state.password, 
+                    token: this.state.token
+                }
+            })
+            .then(res => res.json())
+            .then(userId => {
+                if(userId !==null) {
+                    console.log(userId)
+                    this.props.communicateHandler('Password changed!', VARIANT.SUCCESS)
+                    this.props.history.push("/");
+                }else{
+                    this.props.communicateHandler('An error occured!', VARIANT.DANGER)
+                }
+            })
+            .catch(err => console.log(err))
+        }else{
+            this.props.communicateHandler('Passwords do not match!', VARIANT.DANGER)
+        }
+    }
 
     render(){
         return(
@@ -61,7 +86,7 @@ class ChangePassword extends React.Component{
                                 <Button 
                                     variant="success" 
                                     className="but" 
-                                    // onClick={()=> }
+                                    onClick={()=> this.changePassword()}
                                 >Change password
                                 </Button>
                             </div>
@@ -73,4 +98,4 @@ class ChangePassword extends React.Component{
         
 }
 
-export default withRouter(ChangePassword);
+export default connect()(withRouter(ChangePassword));
