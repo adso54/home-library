@@ -28,18 +28,18 @@ class ChangePassword extends React.Component{
     }
 
     changePassword = () => {
-        if(this.state.password === this.state.confirmPassword){
+        if(this.state.password === this.state.confirmPassword){            
             fetch(process.env.REACT_APP_SERV_ADRESS + '/user/changePassword',{
                 method: 'POST',
-                body: {
-                    password: this.state.password, 
-                    token: this.state.token
-                }
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    token: this.state.token,
+                    password: this.state.password
+                })
             })
             .then(res => res.json())
             .then(userId => {
                 if(userId !==null) {
-                    console.log(userId)
                     this.props.communicateHandler('Password changed!', VARIANT.SUCCESS)
                     this.props.history.push("/");
                 }else{
