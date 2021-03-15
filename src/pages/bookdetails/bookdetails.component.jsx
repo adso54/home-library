@@ -290,6 +290,7 @@ class BookDetails extends React.Component  {
         
     }
 
+    
     handleSubmit = () => {
         const formData = new FormData();
         formData.append('authors', JSON.stringify(this.state.authors));
