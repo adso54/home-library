@@ -99,6 +99,7 @@ class BookDetails extends React.Component  {
                 }
             }
             )
+            this.fetchTop10ByCategory(value);
             return {categories: categories}
         })         
     }
@@ -118,6 +119,7 @@ class BookDetails extends React.Component  {
                 }
             }
             )
+            this.fetchTop10ByAuthor(value);
             return {authors: authors}
         })         
     }
