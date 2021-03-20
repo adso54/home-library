@@ -365,148 +365,152 @@ class BookDetails extends React.Component  {
 
     render(){
         return(
-            <div className="bookdetails">
-                <div className="form">
-                    <Form >
-                        <Form.Group as={Col} controlId="formGridTitle" >
-                            <Form.Label className='label' >Title</Form.Label>
-                            <Form.Control 
-                                type="text" 
-                                placeholder="Enter title" 
-                                value={this.state.title} 
-                                onChange={this.handleChange} 
-                                name="title" 
-                                onFocus={(e)=> this.onFieldFocus(e)}
-                                onBlur = {this.onFieldBlur}
-                            />
-                            {this.state.titleDictionaryValues !== null 
-                                && this.state.titleDictionaryValues.length > 0 
-                                && this.state.focus === 'title'
-                            ? <Dictionary dictionaryValues={this.state.titleDictionaryValues} dictionarySelected={this.titleSelected} /> 
-                            : null}
-                                                  
-                        </Form.Group>
-                        <Form.Group as={Col} >
-                            <Form.Label className='label' >Authors</Form.Label>
+            <div >
+                <div className="bookdetails">
+                    <div className="form">
+                        <Form >
+                            <Form.Group as={Col} controlId="formGridTitle" >
+                                <Form.Label className='label' >Title</Form.Label>
+                                <Form.Control 
+                                    type="text" 
+                                    placeholder="Enter title" 
+                                    value={this.state.title} 
+                                    onChange={this.handleChange} 
+                                    name="title" 
+                                    onFocus={(e)=> this.onFieldFocus(e)}
+                                    onBlur = {this.onFieldBlur}
+                                />
+                                {this.state.titleDictionaryValues !== null 
+                                    && this.state.titleDictionaryValues.length > 0 
+                                    && this.state.focus === 'title'
+                                ? <Dictionary dictionaryValues={this.state.titleDictionaryValues} dictionarySelected={this.titleSelected} /> 
+                                : null}
+                                                    
+                            </Form.Group>
+                            <Form.Group as={Col} >
+                                <Form.Label className='label' >Authors</Form.Label>
 
-                            {this.state.authors.map((author, index) =>(
-                                <div key={index}>
-                                    <div className="authors">
-                                        <Form.Control 
-                                            id={`name ${index}`}
-                                            type="text" 
-                                            placeholder="Name" 
-                                            value={author.name} 
-                                            name={`name ${index}`}
-                                            onChange={(event) => this.handleNameChange(index,event.target.value)}
-                                            onFocus={(e)=> this.onFieldFocus(e)}
-                                            onBlur = {this.onFieldBlur}
-                                        />
-                                        <div className='deleteItem' onClick={(event) => this.deleteAuthorHandler(index, event)}>
-                                            <i className="far fa-trash-alt"></i>   
-                                        </div>                                    
-                                    </div>
-                                    {this.state.authorDictionaryValues !== null 
-                                        && this.state.authorDictionaryValues.length > 0 
-                                        && this.state.focus === `name ${index}`
-                                    ? <Dictionary dictionaryValues={this.state.authorDictionaryValues} dictionarySelected={this.authorSelected} index = {index}/> 
-                                    : null}   
-                                </div>
-                            ))}
-                            <div className='addNew' onClick={this.addAuthorHandler}>                     
-                                <i className="fas fa-plus"><span> NEW</span></i>
-                            </div>
-                        </Form.Group>
-                     
-                        <Form.Group as={Col} >
-                            <Form.Label className='label' >Categories</Form.Label>
-
-                            {this.state.categories.map((category, index) =>(
-                                <div key={index}>
-                                    <div className="authors" >
-                                        <Form.Control 
-                                            id={`category ${index}`}
-                                            type="text" 
-                                            placeholder="Category" 
-                                            value={category.category} 
-                                            onChange={(event) => this.handleCategory(index, event.target.value)}
-                                            name={`category ${index}`}
-                                            onFocus={(e)=> this.onFieldFocus(e)}
-                                            onBlur = {this.onFieldBlur}
-                                        />
-                                        <div 
-                                            className='deleteItem' 
-                                            onClick={(event) => this.deleteCategoryHandler(index, event)}
-                                        >
-                                            <i className="far fa-trash-alt"></i>   
+                                {this.state.authors.map((author, index) =>(
+                                    <div key={index}>
+                                        <div className="authors">
+                                            <Form.Control 
+                                                id={`name ${index}`}
+                                                type="text" 
+                                                placeholder="Name" 
+                                                value={author.name} 
+                                                name={`name ${index}`}
+                                                onChange={(event) => this.handleNameChange(index,event.target.value)}
+                                                onFocus={(e)=> this.onFieldFocus(e)}
+                                                onBlur = {this.onFieldBlur}
+                                            />
+                                            <div className='deleteItem' onClick={(event) => this.deleteAuthorHandler(index, event)}>
+                                                <i className="far fa-trash-alt"></i>   
+                                            </div>                                    
                                         </div>
-                                    </div>            
-                                    {this.state.categoryDictionaryValues !== null 
-                                        && this.state.categoryDictionaryValues.length > 0 
-                                        && this.state.focus === `category ${index}`
-                                    ? <Dictionary dictionaryValues={this.state.categoryDictionaryValues} dictionarySelected={this.categorySelected} index = {index}/> 
-                                    : null}  
+                                        {this.state.authorDictionaryValues !== null 
+                                            && this.state.authorDictionaryValues.length > 0 
+                                            && this.state.focus === `name ${index}`
+                                        ? <Dictionary dictionaryValues={this.state.authorDictionaryValues} dictionarySelected={this.authorSelected} index = {index}/> 
+                                        : null}   
+                                    </div>
+                                ))}
+                                <div className='addNew' onClick={this.addAuthorHandler}>                     
+                                    <i className="fas fa-plus"><span> NEW</span></i>
                                 </div>
-                            ))}
+                            </Form.Group>
+                        
+                            <Form.Group as={Col} >
+                                <Form.Label className='label' >Categories</Form.Label>
 
-                            <div className='addNew' onClick={this.addCategoryHandler}>                     
-                                <i className="fas fa-plus"><span> NEW</span></i>
+                                {this.state.categories.map((category, index) =>(
+                                    <div key={index}>
+                                        <div className="authors" >
+                                            <Form.Control 
+                                                id={`category ${index}`}
+                                                type="text" 
+                                                placeholder="Category" 
+                                                value={category.category} 
+                                                onChange={(event) => this.handleCategory(index, event.target.value)}
+                                                name={`category ${index}`}
+                                                onFocus={(e)=> this.onFieldFocus(e)}
+                                                onBlur = {this.onFieldBlur}
+                                            />
+                                            <div 
+                                                className='deleteItem' 
+                                                onClick={(event) => this.deleteCategoryHandler(index, event)}
+                                            >
+                                                <i className="far fa-trash-alt"></i>   
+                                            </div>
+                                        </div>            
+                                        {this.state.categoryDictionaryValues !== null 
+                                            && this.state.categoryDictionaryValues.length > 0 
+                                            && this.state.focus === `category ${index}`
+                                        ? <Dictionary dictionaryValues={this.state.categoryDictionaryValues} dictionarySelected={this.categorySelected} index = {index}/> 
+                                        : null}  
+                                    </div>
+                                ))}
+
+                                <div className='addNew' onClick={this.addCategoryHandler}>                     
+                                    <i className="fas fa-plus"><span> NEW</span></i>
+                                </div>
+                            </Form.Group>
+                            <Form.Group as={Col}>
+                                <Form.Label className='label' >Description</Form.Label>
+                                <Form.Control as="textarea" aria-label="Comments" name="description" value={this.state.description} onChange={this.handleChange}/>
+                            </Form.Group>
+                            <Form.Group as={Col}>
+                                <Form.Label className='label' >My comments</Form.Label>
+                                <Form.Control as="textarea" aria-label="Comments" name="comments" value={this.state.comments} onChange={this.handleChange} />
+                            </Form.Group>
+                            <Form.Group as={Col}>
+                                <Form.Label className='label' >Read date </Form.Label>
+                                <DatePicker 
+                                    className='datepicker'
+                                    selected={this.state.readDate} 
+                                    onChange={date => this.handleReadDateChange(date)}
+                                    dateFormat="yyyy-MM-dd"
+                                    customInput={ 
+                                        <Form.Control 
+                                            id='readDate'
+                                            type="text" 
+                                            value={this.state.readDate}
+                                            name="readDate"
+                                        />
+                                    }
+
+                                />
+                            </Form.Group>    
+                        
+                          
+                        </Form>
+                    </div>
+                    <div className="rightContainer">
+                        <Image className="image" src={this.state.fileUrl} rounded />
+                        <Form.File 
+                            id="custom-file"
+                            label="Custom file input"
+                            custom
+                            onChange={this.handleImageChange}
+                        />
+                    </div>
+                    
+                </div>
+                <div className="buttons">
+                    {this.state.userHasBook ? 
+                        <div className="buttons">
+                            <div >
+                                <Button className="button" variant='secondary' onClick={this.handleSubmit} >Edit</Button>
                             </div>
-                        </Form.Group>
-                        <Form.Group as={Col}>
-                            <Form.Label className='label' >Description</Form.Label>
-                            <Form.Control as="textarea" aria-label="Comments" name="description" value={this.state.description} onChange={this.handleChange}/>
-                        </Form.Group>
-                        <Form.Group as={Col}>
-                            <Form.Label className='label' >My comments</Form.Label>
-                            <Form.Control as="textarea" aria-label="Comments" name="comments" value={this.state.comments} onChange={this.handleChange} />
-                        </Form.Group>
-                        <Form.Group as={Col}>
-                            <Form.Label className='label' >Read date </Form.Label>
-                            <DatePicker 
-                                className='datepicker'
-                                selected={this.state.readDate} 
-                                onChange={date => this.handleReadDateChange(date)}
-                                dateFormat="yyyy-MM-dd"
-                                customInput={ 
-                                    <Form.Control 
-                                        id='readDate'
-                                        type="text" 
-                                        value={this.state.readDate}
-                                        name="readDate"
-                                    />
-                                }
-
-                            />
-                        </Form.Group>    
-                       
-                        {
-                            this.state.userHasBook ? 
-                                <div className="buttons">
-                                    <div >
-                                        <Button className="button" variant='secondary' onClick={this.handleSubmit} >Edit</Button>
-                                    </div>
-                                    <div >
-                                        <Button className="button" variant='danger' onClick={this.handleDelete} >Delete</Button>
-                                    </div>
-                                </div>                            
-                            :
-                                <div className="addButton">
-                                    <Button  variant='secondary' onClick={this.handleSubmit} >Add book</Button>
-                                </div>
-                        }
-                    </Form>
+                            <div >
+                                <Button className="button" variant='danger' onClick={this.handleDelete} >Delete</Button>
+                            </div>
+                        </div>                            
+                    :
+                        <div className="addButton">
+                            <Button  variant='secondary' onClick={this.handleSubmit} >Add book</Button>
+                        </div>
+                    }
                 </div>
-                <div className="rightContainer">
-                    <Image className="image" src={this.state.fileUrl} rounded />
-                    <Form.File 
-                        id="custom-file"
-                        label="Custom file input"
-                        custom
-                        onChange={this.handleImageChange}
-                    />
-                </div>
-                
             </div>
         )}
     };
