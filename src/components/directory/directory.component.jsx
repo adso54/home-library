@@ -50,7 +50,7 @@ class Directory extends React.Component {
             let categoryFits = false;
             let titleFits = false;
 
-            titleFits = book.title.toLowerCase().includes(this.props.searchField);
+            titleFits = book.title.toLowerCase().includes(this.props.searchField.toLowerCase());
 
             book.author.forEach((author) => (
                 author.name.toLowerCase().includes(this.props.searchField.toLowerCase()) ? authorFits = true : null
