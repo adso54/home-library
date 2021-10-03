@@ -10,7 +10,7 @@ import './navbar.styles.scss'
 const NavbarKD = ({signOut, user, setSearchField, searchVisable}) => {
     
     return(
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar className ='ml_navbar'  collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Navbar.Brand href="/">My Library</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
