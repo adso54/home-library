@@ -10,8 +10,17 @@ import './navbar.styles.scss'
 const NavbarKD = ({signOut, user, setSearchField, searchVisable}) => {
     
     return(
-        <Navbar className ='ml_navbar'  collapseOnSelect expand="lg" bg="dark" variant="dark">
-            <Navbar.Brand href="/">My Library</Navbar.Brand>
+        <Navbar className ='ml_navbar'  collapseOnSelect expand="lg" bg="dark" variant="dark">      
+            <Navbar.Brand href="#home">
+            <img
+                src="/android-chrome-512x512.png"
+                width="50"
+                height="50"
+                className="d-inline-block align-top"
+                alt="React Bootstrap logo"
+            />
+            </Navbar.Brand>
+            <Navbar.Brand href="/" className='ml_navbarMobile'>My Library</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
@@ -19,7 +28,7 @@ const NavbarKD = ({signOut, user, setSearchField, searchVisable}) => {
                                 Add book
                             </Link> 
                 {searchVisable ? 
-                    <InputGroup className="mb-3 searchPanel">
+                    <InputGroup className="mb-3 searchPanel" >
                         <InputGroup.Prepend>
                             <InputGroup.Text className='searchIcon'><i className="fas fa-search"></i></InputGroup.Text>
                         </InputGroup.Prepend>
